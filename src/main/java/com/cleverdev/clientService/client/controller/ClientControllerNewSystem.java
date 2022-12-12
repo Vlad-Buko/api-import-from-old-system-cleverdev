@@ -2,8 +2,6 @@ package com.cleverdev.clientService.client.controller;
 
 import com.cleverdev.clientService.client.consumer.JsonUtils;
 import com.cleverdev.clientService.client.dto.ClientDtoOne;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.json.simple.JSONArray;
@@ -12,11 +10,9 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.FileReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by Vladislav Domaniewski
@@ -28,7 +24,7 @@ import java.util.Objects;
 public class ClientControllerNewSystem {
 
     public static final String WEATHER_URL =
-            "http://localhost:8081/clients";
+            "http://localhost:8081/api/old/clients";
 
     final RestTemplate restTemplate = new RestTemplate();
 
@@ -51,6 +47,15 @@ public class ClientControllerNewSystem {
 //            person.set(i, );
 //            System.out.println("-" + clientJsonArray + "-");
 //        }
+
+        for (Object it : clientJsonArray){
+            // Получаем ключ из JSON
+            JSONObject jso = (JSONObject) it;
+
+            String agency = (String) jso.get("lastName");
+            System.out.println("Имя" + agency);
+        }
+
 
         return clientJsonArray;
     }

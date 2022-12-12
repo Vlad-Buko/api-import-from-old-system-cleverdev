@@ -1,6 +1,6 @@
 package com.cleverdev.clientService.client.enums;
 
-public enum ClientStatusEnum {
+public enum PatientStatusEnum {
     PENDING,
     ACTIVE,
     INACTIVE,
