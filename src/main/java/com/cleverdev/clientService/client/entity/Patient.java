@@ -1,7 +1,9 @@
 package com.cleverdev.clientService.client.entity;
 
 import com.cleverdev.clientService.client.enums.PatientStatusEnum;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -12,7 +14,15 @@ import javax.persistence.*;
 @Entity
 @Data
 @Table(name = "patient_profile")
-public class ClientEntity {
+@NoArgsConstructor
+public class Patient {
+    public Patient(String firstName, String lastName, String oldClientGuid, PatientStatusEnum statusId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.oldClientGuid = oldClientGuid;
+        this.statusId = statusId;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

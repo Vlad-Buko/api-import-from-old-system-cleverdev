@@ -7,7 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Created by Vladislav Domaniewski
+ * Edit by Vladislav Domaniewski
  */
 
 public class JsonUtils {
@@ -32,7 +32,6 @@ public class JsonUtils {
             // построчно считываем результат в объект StringBuilder
             while ((inputLine = in.readLine()) != null) {
                 stringBuilder.append(inputLine);
-                System.out.println(inputLine);
             }
         } catch (IOException e) {
             e.printStackTrace();

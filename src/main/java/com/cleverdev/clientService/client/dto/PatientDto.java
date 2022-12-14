@@ -15,8 +15,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-public class ClientDtoOne implements Serializable {
+public class PatientDto implements Serializable {
 
     @Schema(description = "Agency")
     private String agency;
