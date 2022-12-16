@@ -1,5 +1,6 @@
 package com.cleverdev.clientService;
 
+import com.cleverdev.clientService.patient.controller.PatientControllerNewSystem;
 import com.google.gson.Gson;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +21,9 @@ public class CleverDevNewSystem {
     public static void main(String[] args) throws Exception {
 
         SpringApplication.run(CleverDevNewSystem.class, args);
+        PatientControllerNewSystem patien = new PatientControllerNewSystem();
+
+        patien.getJsonFromOldSystem();
     }
 
 }

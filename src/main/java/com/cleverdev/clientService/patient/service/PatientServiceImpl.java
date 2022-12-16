@@ -1,10 +1,9 @@
-package com.cleverdev.clientService.client.service;
+package com.cleverdev.clientService.patient.service;
 
-import com.cleverdev.clientService.client.consumer.JsonUtils;
-import com.cleverdev.clientService.client.dto.PatientDto;
-import com.cleverdev.clientService.client.entity.Patient;
-import com.cleverdev.clientService.client.enums.PatientStatusEnum;
-import com.cleverdev.clientService.client.repository.PatientRepository;
+import com.cleverdev.clientService.patient.consumer.JsonUtils;
+import com.cleverdev.clientService.patient.entity.Patient;
+import com.cleverdev.clientService.patient.enums.PatientStatusEnum;
+import com.cleverdev.clientService.patient.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

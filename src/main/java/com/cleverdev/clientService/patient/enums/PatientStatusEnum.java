@@ -1,4 +1,4 @@
-package com.cleverdev.clientService.client.enums;
+package com.cleverdev.clientService.patient.enums;
 
 public enum PatientStatusEnum {
     PENDING,
