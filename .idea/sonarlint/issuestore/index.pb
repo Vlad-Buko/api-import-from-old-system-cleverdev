@@ -1,3 +1,27 @@
 
 8
 mvnw.cmd,1/f/1f1763f358c257ea3515417352b82b0165647ad1
+x
+Hsrc/main/java/com/cleverdev/clientService/repository/NoteRepository.java,e/6/e6ba19777090fd7ee3718a85669cc6cb6e8554df
+v
+Fsrc/main/java/com/cleverdev/clientService/enums/PatientStatusEnum.java,f/8/f8ece05559ea61a70e9e254e0af5be8e76ef3c51
+q
+Asrc/main/java/com/cleverdev/clientService/core/DataException.java,2/6/262813bab82f004d311122981fb74468ae844944
+x
+Hsrc/main/java/com/cleverdev/clientService/controller/UserController.java,6/4/64e20b88b6859cd901e2248d4f65dadcd45cad94
+q
+Asrc/main/java/com/cleverdev/clientService/consumer/JsonUtils.java,b/0/b03bba0a8419e95fd2ab2c0175caf3324748fbcc
+^
+.src/test/java/notes/PatientControllerTest.java,3/3/33ddee836782f5fb5f9370830bb912cbcf9ce6fa
+x
+Hsrc/main/java/com/cleverdev/clientService/controller/NoteController.java,b/3/b3cf023cf0a7cf10f41d0748bb8acdd5de3aedc8
+j
+:src/main/java/com/cleverdev/clientService/dto/UserDto.java,9/d/9d40ee7940757f03f51fb7ffff3c984399f0d43f
+q
+Asrc/main/java/com/cleverdev/clientService/CleverDevNewSystem.java,9/3/93246eeb2257a26daf51c16d0ca47111b4a510a5
+w
+Gsrc/main/java/com/cleverdev/clientService/dto/ClientNoteRequestDto.java,5/2/52f8223f6c2a8aa679198b985a1e8a172572d7c0
+p
+@src/main/java/com/cleverdev/clientService/dto/ClientNoteDto.java,0/b/0bcbbbac160d44b96b4733abb19f21c2992a0c38
+m
+=src/main/java/com/cleverdev/clientService/dto/PatientDto.java,9/f/9f97529d818c838dae1de30dadde2ce3e0e9ca96

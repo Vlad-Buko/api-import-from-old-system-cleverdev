@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -41,8 +40,4 @@ public class Patient {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
     private List<Note> listNoteForOnePatient;
-
-
-    // value from Old version
-//    private String agency;
 }

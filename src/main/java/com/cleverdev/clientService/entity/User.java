@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Vladislav Domaniewski
@@ -25,4 +26,7 @@ public class User {
 
     @Column(name = "login")
     private String login;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdByUserId")
+    private List<Note> listNote;
 }

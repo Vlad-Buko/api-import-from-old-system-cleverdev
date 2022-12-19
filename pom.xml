@@ -12,7 +12,7 @@
 
     <groupId>org.cleverdev.clientservice</groupId>
     <artifactId>api-for-cleverdev</artifactId>
-    <version>api-new-system-v0.4</version>
+    <version>api-new-system-v0.5</version>
     <name>cleverdevtest-client-service</name>
     <description>cleverdevtest-client-service</description>
 
@@ -81,9 +81,6 @@
             <version>1.1.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
-
-
-
     </dependencies>
 
     <build>

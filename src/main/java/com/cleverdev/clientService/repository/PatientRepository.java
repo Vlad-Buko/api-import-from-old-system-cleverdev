@@ -11,4 +11,5 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     Patient findById(long id);
     List<Patient> findByStatusId(PatientStatusEnum status);
+    Patient findByOldClientGuid(String guid);
 }

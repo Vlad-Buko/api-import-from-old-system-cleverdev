@@ -15,11 +15,10 @@ import org.springframework.web.bind.annotation.*;
 public class PatientController {
 
     /**
-    Здесь мы записываем URL-адрес для запроса нашего старого проекта, для получения JSON
+     * Здесь мы записываем URL-адрес для запроса нашего старого проекта, для получения JSON
      */
 
     private static final String WEATHER_URL = "http://localhost:8081/api/old/clients";
-
 
 
 }

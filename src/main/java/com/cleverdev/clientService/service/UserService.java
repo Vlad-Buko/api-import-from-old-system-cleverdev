@@ -15,11 +15,17 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepository user;
+    private final UserRepository userRepo;
     @Autowired
     private UsersConverter userConverter;
 
     public User addUser(UserDto userGet) {
-        return user.save(userConverter.fromUserDtoToUser(userGet));
+        return userRepo.save(userConverter.fromUserDtoToUser(userGet));
+    }
+
+    public void saveUserFromOldVersionInNew(String loginUser) {
+        UserDto userDto = new UserDto();
+        userDto.setLogin(loginUser);
+        userRepo.save(userConverter.fromUserDtoToUser(userDto));
     }
 }

@@ -1,29 +1,28 @@
-package com.cleverdev.clientService.entity;
+package com.cleverdev.clientService.dto;
 
+import com.cleverdev.clientService.entity.Patient;
+import com.cleverdev.clientService.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 /**
  * Created by Vladislav Domaniewski
  */
 
-@Entity
-@Table(name = "patient_note")
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class Note {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+@NoArgsConstructor
+@Builder
+public class NoteDto {
     @Column(name = "created_date_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDateTime;
@@ -32,11 +31,10 @@ public class Note {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastModifiedDateTime;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_user_id")
+    @Column(name = "created_by_user_id")
     private User createdByUserId;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
+    //    @ManyToOne(fetch = FetchType.EAGER)
 //    @JoinColumn(name = "last_modified_by_user_id")
     @Column(name = "last_modified_by_user_id")
     private Long lastModifiedByUserId;
