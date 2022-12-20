@@ -20,9 +20,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 /**
  * Created by Vladislav Domaniewski
@@ -39,6 +37,10 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
     private final UserService userService;
     @Value("${app.urlNotes}")
     private String urlForNotes;
+    @Value("${app.importData.dateFrom}")
+    private String dateFrom;
+    @Value("${app.importData.dateTo}")
+    private String dateTo;
 
     @Override
     public JSONArray getJsonObjFromOldSystem(String urlClient) {
@@ -47,14 +49,12 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
         HttpEntity<JSONObject> entity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<JSONArray> response = restTemplate.exchange(urlClient, HttpMethod.POST, entity, typeRef);
-        JSONArray responseDetails = response.getBody();
-        return responseDetails;
+        return response.getBody();
     }
 
-    public List<PatientDto> getObjectJsonForCreatePatientDtoAndSaveInDB(JSONArray getObjFromOldSystem) {
-        List<PatientDto> fullListClientFromOldSystem = new ArrayList<>();
+    public void importFromOldSystem(JSONArray getObjFromOldSystem) {
         for (Object ob : getObjFromOldSystem) {
-            PatientDto patientDto = new PatientDto();
+            PatientDto patientDto;
             LinkedHashMap<Object, Object> jsonPatientKey = (LinkedHashMap) ob;
             patientDto = PatientDto.builder()
                     .agency((String) jsonPatientKey.get("agency"))
@@ -64,18 +64,19 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
                     .lastName((String) jsonPatientKey.get("lastName"))
                     .status((PatientStatusEnum.valueOf(jsonPatientKey.get("status").toString())))
                     .build();
-
+            if (patientRepo.findByOldClientGuid(patientDto.getGuid()) != null) {
+                continue;
+            }
             patientRepo.save(patientConvert.fromPatientDtoToPatient(patientDto));
 
             if (PatientStatusEnum.ACTIVE == (PatientStatusEnum.valueOf(jsonPatientKey.get("status").toString()))) {
-
                 try{
                     HttpHeaders headers = new HttpHeaders();
                     headers.setContentType(MediaType.APPLICATION_JSON);
                     JSONObject request = new JSONObject();
                     request.put("agency", jsonPatientKey.get("agency"));
-                    request.put("dateFrom", "2020-12-15");          //потом поменяем
-                    request.put("dateTo", "2022-12-15");            // потом поменяем
+                    request.put("dateFrom", dateFrom);
+                    request.put("dateTo", dateTo);
                     request.put("clientGuid", jsonPatientKey.get("guid"));
                     RestTemplate restTemplate = new RestTemplate();
                     HttpEntity<JSONObject> entity = new HttpEntity<>(request, headers);
@@ -86,7 +87,7 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
                         continue;
                     } else {
                         for (Object it : responseDetailsNotes) {
-                            Patient findIdPatientForWriteForNoteEntity = patientRepo.findByOldClientGuid((String)jsonPatientKey.get("guid"));
+                            Patient findIdPatientForWriteForNoteEntity = patientRepo.findByOldClientGuid((String) jsonPatientKey.get("guid"));
                             NoteDto noteDto = new NoteDto();
 
                             LinkedHashMap<Object, Object> jsonNoteKey = (LinkedHashMap) it;
@@ -102,7 +103,7 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
                                     .createdDateTime(LocalDateTime.parse((String)jsonNoteKey.get("createdDateTime"), formatter))
                                     .lastModifiedDateTime(LocalDateTime.parse((String)jsonNoteKey.get("modifiedDateTime"), formatter))
                                     .createdByUserId(findIdUserForWriteUserEntity)
-                                    .lastModifiedByUserId(12l)
+                                    .lastModifiedByUserId(findIdUserForWriteUserEntity)
                                     .comment((String) jsonNoteKey.get("comments"))
                                     .patient(findIdPatientForWriteForNoteEntity)
                                     .build();
@@ -113,10 +114,7 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
                 } catch (Exception e) {
                     System.err.println(e);
                 }
-            } else {
-                continue;
             }
         }
-        return fullListClientFromOldSystem;
     }
 }

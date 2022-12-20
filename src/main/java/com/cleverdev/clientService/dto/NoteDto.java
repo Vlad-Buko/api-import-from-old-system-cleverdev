@@ -35,7 +35,7 @@ public class NoteDto {
     private User createdByUserId;
 
     @Column(name = "last_modified_by_user_id")
-    private Long lastModifiedByUserId;
+    private User lastModifiedByUserId;
 
     @Column(name = "comment")
     private String comment;

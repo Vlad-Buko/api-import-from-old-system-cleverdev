@@ -36,12 +36,11 @@ public class Note {
     @JoinColumn(name = "created_by_user_id")
     private User createdByUserId;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "last_modified_by_user_id")
-    @Column(name = "last_modified_by_user_id")
-    private Long lastModifiedByUserId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "last_modified_by_user_id")
+    private User lastModifiedByUserId;
 
-    @Column(name = "comment")
+    @Column(name = "note")
     private String comment;
 
     @ManyToOne(fetch = FetchType.EAGER)

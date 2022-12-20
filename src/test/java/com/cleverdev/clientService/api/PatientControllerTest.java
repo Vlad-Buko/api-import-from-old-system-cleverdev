@@ -1,4 +1,4 @@
-package notes;
+package com.cleverdev.clientService.api;
 
 import com.cleverdev.clientService.dto.ClientNoteRequestDto;
 import com.cleverdev.clientService.repository.PatientRepository;

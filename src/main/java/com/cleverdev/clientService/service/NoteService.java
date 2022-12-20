@@ -1,5 +1,6 @@
 package com.cleverdev.clientService.service;
 
+import com.cleverdev.clientService.entity.Note;
 import com.cleverdev.clientService.service.converter.PatientConvert;
 import com.cleverdev.clientService.repository.NoteRepository;
 import com.cleverdev.clientService.repository.PatientRepository;
@@ -18,6 +19,10 @@ public class NoteService implements GetJsonFromOldSystem {
     private final NoteRepository noteRepo;
     private final PatientService patientService;
     private final PatientConvert patientConvert;
+
+    public Note createNewNote() {
+        return null;
+    }
 
     @Override
     public JSONArray getJsonObjFromOldSystem(String urlClient) {

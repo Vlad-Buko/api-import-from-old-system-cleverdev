@@ -1,5 +1,6 @@
 package com.cleverdev.clientService.service;
 
+import com.cleverdev.clientService.dto.PatientDto;
 import com.cleverdev.clientService.service.converter.PatientConvert;
 import com.cleverdev.clientService.entity.Patient;
 import com.cleverdev.clientService.exceptions.GuidAlreadyExistException;
