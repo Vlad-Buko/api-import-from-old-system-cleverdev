@@ -1,4 +1,4 @@
-package com.cleverdev.clientService.converter;
+package com.cleverdev.clientService.service.converter;
 
 import com.cleverdev.clientService.dto.NoteDto;
 import com.cleverdev.clientService.entity.Note;

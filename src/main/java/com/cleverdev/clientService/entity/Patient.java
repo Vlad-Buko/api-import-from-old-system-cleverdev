@@ -1,6 +1,6 @@
 package com.cleverdev.clientService.entity;
 
-import com.cleverdev.clientService.enums.PatientStatusEnum;
+import com.cleverdev.clientService.service.enums.PatientStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

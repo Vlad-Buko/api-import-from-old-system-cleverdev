@@ -9,5 +9,4 @@ public interface GetJsonFromOldSystem {
 
     JSONArray getJsonObjFromOldSystem(String urlClient);
 
-    void populatingDataBaseNotes(String urlNote);
 }

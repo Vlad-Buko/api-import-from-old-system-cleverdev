@@ -29,4 +29,7 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdByUserId")
     private List<Note> listNote;
+
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lastModifiedByUserId")
+//    private List<Note> list;
 }

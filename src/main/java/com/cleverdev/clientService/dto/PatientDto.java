@@ -1,6 +1,6 @@
 package com.cleverdev.clientService.dto;
 
-import com.cleverdev.clientService.enums.PatientStatusEnum;
+import com.cleverdev.clientService.service.enums.PatientStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

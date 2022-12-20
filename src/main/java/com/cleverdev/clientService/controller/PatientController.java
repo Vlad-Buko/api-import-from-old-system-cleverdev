@@ -1,7 +1,11 @@
 package com.cleverdev.clientService.controller;
 
-import lombok.NoArgsConstructor;
+import com.cleverdev.clientService.exceptions.GuidAlreadyExistException;
+import com.cleverdev.clientService.model.PatientModel;
+import com.cleverdev.clientService.service.PatientService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -10,16 +14,35 @@ import org.springframework.web.bind.annotation.*;
 
 @Log
 @RestController
-@RequestMapping("/api")
-@NoArgsConstructor
+@RequestMapping("/api/patient")
+@RequiredArgsConstructor
 public class PatientController {
+    private final PatientService patientService;
 
-    /**
-     * Здесь мы записываем URL-адрес для запроса нашего старого проекта, для получения JSON
-     */
+    @PostMapping("/create-patient")
+    public void createPatient(@RequestBody PatientModel patientModel) {
+        log.info("Patient added successful in DB!!!");
+        try {
+            patientService.createPatient(patientModel);
+        } catch (GuidAlreadyExistException e) {
+            System.out.println(e.getMessage());
+        }
 
-    private static final String WEATHER_URL = "http://localhost:8081/api/old/clients";
+    }
 
+    @PatchMapping("/update")
+    public void updateStudent(@RequestBody PatientModel patientModel,
+                              @RequestParam String guidFromOldSystem) {
+
+        log.info("Patient " + patientService.pathMappingPatient(patientModel,
+                guidFromOldSystem) + "was updated!");
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
+        log.info("Patient " + patientService.deletePatientFromDb(id) + " successful successful from DB!!!");
+        return ResponseEntity.ok().build();
+    }
 
 }
 

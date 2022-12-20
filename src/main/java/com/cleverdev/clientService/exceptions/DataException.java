@@ -1,4 +1,4 @@
-package com.cleverdev.clientService.core;
+package com.cleverdev.clientService.exceptions;
 
 /**
  * Created by Vladislav Domaniewski

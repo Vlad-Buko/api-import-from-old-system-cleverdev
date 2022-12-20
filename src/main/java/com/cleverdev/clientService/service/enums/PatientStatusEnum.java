@@ -1,4 +1,4 @@
-package com.cleverdev.clientService.enums;
+package com.cleverdev.clientService.service.enums;
 
 /**
  * Created by Vladislav Domaniewski

@@ -1,6 +1,6 @@
 package com.cleverdev.clientService.service;
 
-import com.cleverdev.clientService.converter.UsersConverter;
+import com.cleverdev.clientService.service.converter.UsersConverter;
 import com.cleverdev.clientService.dto.UserDto;
 import com.cleverdev.clientService.repository.UserRepository;
 import com.cleverdev.clientService.entity.User;

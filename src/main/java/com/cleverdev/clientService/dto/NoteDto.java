@@ -34,8 +34,6 @@ public class NoteDto {
     @Column(name = "created_by_user_id")
     private User createdByUserId;
 
-    //    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "last_modified_by_user_id")
     @Column(name = "last_modified_by_user_id")
     private Long lastModifiedByUserId;
 

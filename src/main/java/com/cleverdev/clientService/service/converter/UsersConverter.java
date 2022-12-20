@@ -1,4 +1,4 @@
-package com.cleverdev.clientService.converter;
+package com.cleverdev.clientService.service.converter;
 
 import com.cleverdev.clientService.dto.UserDto;
 import com.cleverdev.clientService.entity.User;
@@ -16,9 +16,9 @@ public class UsersConverter {
                 .build();
     }
 
-    public UserDto fromUserToUserDto(User user) {
-        return UserDto.builder()
-                .login(user.getLogin())
-                .build();
-    }
+//    public UserDto fromUserToUserDto(User user) {
+//        return UserDto.builder()
+//                .login(user.getLogin())
+//                .build();
+//    }
 }
