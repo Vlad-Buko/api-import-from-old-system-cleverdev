@@ -1,6 +1,6 @@
-package com.cleverdev.clientService.client.dto;
+package com.cleverdev.clientService.dto;
 
-import com.cleverdev.clientService.client.enums.ClientStatusEnum;
+import com.cleverdev.clientService.service.enums.PatientStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientDtoOne implements Serializable {
+@Builder
+public class PatientDto implements Serializable {
 
     @Schema(description = "Agency")
     private String agency;
@@ -27,7 +28,7 @@ public class ClientDtoOne implements Serializable {
     @Schema(description = "Last name")
     private String lastName;
     @Schema(description = "Client status")
-    private ClientStatusEnum status;
+    private PatientStatusEnum status;
     @Schema(description = "Client Date of Birth", format = "yyyy-MM-dd", example = "1920-05-25")
     private LocalDate dob;
     @Schema(description = "Client creation date", format = "yyyy-MM-dd HH:mm:ss", example = "2000-10-20 03:10:24")

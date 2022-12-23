@@ -1,17 +1,0 @@
-
-t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Ì´±úÿÿÿÿ
-
-java:S1130"lRemove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.(ÙØ¤Şıÿÿÿÿ8ò¸£‰Ğ0
-N
-java:S1128"1Remove this unused import 'com.google.gson.Gson'.(–§8ô¸£‰Ğ0
-c
-java:S1128"ARemove this unused import 'org.springframework.data.domain.Page'.(˜âüÿÿÿÿ8ö¸£‰Ğ0
-P
-java:S1128"3Remove this unused import 'java.io.BufferedReader'.(€é²Å8÷¸£‰Ğ0
-S
-java:S1128	"6Remove this unused import 'java.io.InputStreamReader'.(ãˆÎÉ8ø¸£‰Ğ0
-K
-java:S1128
-")Remove this unused import 'java.net.URL'.(ñìÁ„üÿÿÿÿ8ú¸£‰Ğ0
-M
-java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8û¸£‰Ğ0

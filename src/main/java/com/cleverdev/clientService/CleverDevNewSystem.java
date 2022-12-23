@@ -1,25 +1,18 @@
 package com.cleverdev.clientService;
 
-import com.google.gson.Gson;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.domain.Page;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.List;
 
 /**
  * Created by Vladislav Domaniewski
  */
 
+@EnableScheduling
 @SpringBootApplication
 public class CleverDevNewSystem {
-
-    public static void main(String[] args) throws Exception {
-
+    public static void main(String[] args) {
         SpringApplication.run(CleverDevNewSystem.class, args);
     }
-
 }
