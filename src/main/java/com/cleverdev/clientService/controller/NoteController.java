@@ -1,16 +1,14 @@
 package com.cleverdev.clientService.controller;
 
-import com.cleverdev.clientService.dto.ClientNoteDto;
-import com.cleverdev.clientService.dto.NoteDto;
-import com.cleverdev.clientService.entity.Patient;
-import com.cleverdev.clientService.entity.User;
-import com.cleverdev.clientService.repository.NoteRepository;
+import com.cleverdev.clientService.exceptions.NoteNoteFoundException;
+import com.cleverdev.clientService.model.NoteModel;
 import com.cleverdev.clientService.service.NoteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 
 /**
  * Created by Vladislav Domaniewski
@@ -20,19 +18,41 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/note")
 @RequiredArgsConstructor
+@ControllerAdvice
 public class NoteController {
     private final NoteService noteService;
 
-    @PostMapping("/dd")
-    public ResponseEntity<Void> createNewNote(@RequestBody NoteDto noteDto,
+    @PostMapping("/create")
+    public ResponseEntity<Void> createNewNote(@RequestBody NoteModel noteModel,
                                               @RequestParam String userLogin,
-                                              @RequestParam String patientGuid) {
-        noteService.createNewNote();
+                                              @RequestParam String patientGuidOrLoginId) {
+        noteService.createNewNote(noteModel, userLogin, patientGuidOrLoginId);
+        log.info("Note was be added!");
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/get-note")
+    public HashMap<Object, Object> showNoteForUser (@RequestParam String userLogin) {
+        return noteService.showNotes(userLogin);
+    }
+
+    @PatchMapping("/change-note")
+    public ResponseEntity<Void> changeNote(@RequestBody NoteModel noteModel,
+                                           @RequestParam Long id) {
+        noteService.updateOneNote(noteModel, id);
+        log.info("Note was be change");
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteNoteFromDB(@PathVariable String guid){
+    public ResponseEntity<Void> deleteNoteFromDB(@PathVariable Long idNote)
+            throws NoteNoteFoundException{
+        try {
+            noteService.deleteNoteFromSystem(idNote);
+        } catch (NoteNoteFoundException e) {
+            throw new NoteNoteFoundException("Note was be not found! Please, write another id!");
+        }
+        log.info("NOTE was be delete!");
         return ResponseEntity.ok().build();
     }
 }

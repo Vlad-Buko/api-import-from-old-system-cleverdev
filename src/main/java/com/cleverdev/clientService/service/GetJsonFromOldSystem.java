@@ -8,5 +8,4 @@ public interface GetJsonFromOldSystem {
     };
 
     JSONArray getJsonObjFromOldSystem(String urlClient);
-
 }

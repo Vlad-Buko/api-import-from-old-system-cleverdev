@@ -1,6 +1,5 @@
 package com.cleverdev.clientService.service;
 
-import com.cleverdev.clientService.dto.PatientDto;
 import com.cleverdev.clientService.service.converter.PatientConvert;
 import com.cleverdev.clientService.entity.Patient;
 import com.cleverdev.clientService.exceptions.GuidAlreadyExistException;
@@ -9,7 +8,6 @@ import com.cleverdev.clientService.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.springframework.stereotype.Service;
-
 
 
 /**
@@ -23,7 +21,7 @@ public class PatientService implements GetJsonFromOldSystem {
     private final PatientConvert patientConvert;
 
     public void createPatient(PatientModel patientModel) throws GuidAlreadyExistException {
-        if (patientRepository.findByOldClientGuid(patientModel.getOldClientGuid()) == null){
+        if (patientRepository.findByOldClientGuid(patientModel.getOldClientGuid()) == null) {
             patientRepository.save(patientConvert.fromPatientModelToPatient(patientModel));
         } else {
             Patient patient = patientRepository.findByOldClientGuid(patientModel.getOldClientGuid());
@@ -35,7 +33,6 @@ public class PatientService implements GetJsonFromOldSystem {
 
     public Patient pathMappingPatient(PatientModel patientModel, String guid) {
         Patient patient = patientRepository.findByOldClientGuid(guid);
-//        patient.setId(patient.getId());
         patient.setFirstName(patientModel.getFirstName());
         patient.setLastName(patientModel.getLastName());
         patient.setOldClientGuid(patientModel.getOldClientGuid());

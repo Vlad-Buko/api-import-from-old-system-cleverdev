@@ -2,6 +2,7 @@ package com.cleverdev.clientService.service.converter;
 
 import com.cleverdev.clientService.dto.NoteDto;
 import com.cleverdev.clientService.entity.Note;
+import com.cleverdev.clientService.model.NoteModel;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,6 +20,12 @@ public class NoteConverter {
                 .lastModifiedByUserId(noteDto.getLastModifiedByUserId())
                 .comment(noteDto.getComment())
                 .patient(noteDto.getPatient())
+                .build();
+    }
+
+    public NoteDto fromNoteModelToNoteDto(NoteModel noteModel) {
+        return NoteDto.builder()
+                .comment(noteModel.getNote())
                 .build();
     }
 }

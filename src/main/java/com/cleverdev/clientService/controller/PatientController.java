@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class PatientController {
     private final PatientService patientService;
 
-    @PostMapping("/create-patient")
+    @PostMapping("/create")
     public void createPatient(@RequestBody PatientModel patientModel) {
         log.info("Patient added successful in DB!!!");
         try {

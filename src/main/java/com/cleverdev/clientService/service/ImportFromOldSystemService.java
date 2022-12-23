@@ -1,15 +1,10 @@
 package com.cleverdev.clientService.service;
 
-import com.cleverdev.clientService.service.converter.NoteConverter;
 import com.cleverdev.clientService.service.converter.PatientConvert;
-import com.cleverdev.clientService.dto.NoteDto;
 import com.cleverdev.clientService.dto.PatientDto;
-import com.cleverdev.clientService.entity.Patient;
-import com.cleverdev.clientService.entity.User;
 import com.cleverdev.clientService.service.enums.PatientStatusEnum;
-import com.cleverdev.clientService.repository.NoteRepository;
 import com.cleverdev.clientService.repository.PatientRepository;
-import com.cleverdev.clientService.repository.UserRepository;
+import com.cleverdev.clientService.service.getDataFromOldSystemMethods.DataFromOldSystem;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -19,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 
 /**
@@ -29,12 +23,9 @@ import java.util.LinkedHashMap;
 @Service
 @RequiredArgsConstructor
 public class ImportFromOldSystemService implements GetJsonFromOldSystem {
-    private final NoteRepository noteRepo;
     private final PatientRepository patientRepo;
-    private final UserRepository userRepo;
     private final PatientConvert patientConvert;
-    private final NoteConverter noteConverter;
-    private final UserService userService;
+    private final DataFromOldSystem dataFromOldSystem;
     @Value("${app.urlNotes}")
     private String urlForNotes;
     @Value("${app.importData.dateFrom}")
@@ -56,6 +47,7 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
         for (Object ob : getObjFromOldSystem) {
             PatientDto patientDto;
             LinkedHashMap<Object, Object> jsonPatientKey = (LinkedHashMap) ob;
+            ;
             patientDto = PatientDto.builder()
                     .agency((String) jsonPatientKey.get("agency"))
                     .createdDateTime((LocalDateTime) jsonPatientKey.get("createDateTime"))
@@ -64,13 +56,12 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
                     .lastName((String) jsonPatientKey.get("lastName"))
                     .status((PatientStatusEnum.valueOf(jsonPatientKey.get("status").toString())))
                     .build();
-            if (patientRepo.findByOldClientGuid(patientDto.getGuid()) != null) {
-                continue;
+            if (patientRepo.findByOldClientGuid(patientDto.getGuid()) == null) {
+                patientRepo.save(patientConvert.fromPatientDtoToPatient(patientDto));
             }
-            patientRepo.save(patientConvert.fromPatientDtoToPatient(patientDto));
-
             if (PatientStatusEnum.ACTIVE == (PatientStatusEnum.valueOf(jsonPatientKey.get("status").toString()))) {
-                try{
+
+                try {
                     HttpHeaders headers = new HttpHeaders();
                     headers.setContentType(MediaType.APPLICATION_JSON);
                     JSONObject request = new JSONObject();
@@ -81,35 +72,12 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
                     RestTemplate restTemplate = new RestTemplate();
                     HttpEntity<JSONObject> entity = new HttpEntity<>(request, headers);
                     ResponseEntity<JSONArray> response = restTemplate.exchange(urlForNotes, HttpMethod.POST, entity, typeRef);
+                    JSONArray responseDetailsNotes = response.getBody();
 
-                    JSONArray  responseDetailsNotes = response.getBody();
                     if (responseDetailsNotes.size() == 0) {
                         continue;
                     } else {
-                        for (Object it : responseDetailsNotes) {
-                            Patient findIdPatientForWriteForNoteEntity = patientRepo.findByOldClientGuid((String) jsonPatientKey.get("guid"));
-                            NoteDto noteDto = new NoteDto();
-
-                            LinkedHashMap<Object, Object> jsonNoteKey = (LinkedHashMap) it;
-
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                            User findIdUserForWriteUserEntity = userRepo.findByLogin((String) jsonNoteKey.get("loggedUser"));  // 0
-                            if (findIdUserForWriteUserEntity == null) {
-                                userService.saveUserFromOldVersionInNew((String) jsonNoteKey.get("loggedUser"));
-                                User findIfNotFound = userRepo.findByLogin((String) jsonNoteKey.get("loggedUser"));
-                                findIdUserForWriteUserEntity = findIfNotFound;
-                            }
-                            noteDto = NoteDto.builder()
-                                    .createdDateTime(LocalDateTime.parse((String)jsonNoteKey.get("createdDateTime"), formatter))
-                                    .lastModifiedDateTime(LocalDateTime.parse((String)jsonNoteKey.get("modifiedDateTime"), formatter))
-                                    .createdByUserId(findIdUserForWriteUserEntity)
-                                    .lastModifiedByUserId(findIdUserForWriteUserEntity)
-                                    .comment((String) jsonNoteKey.get("comments"))
-                                    .patient(findIdPatientForWriteForNoteEntity)
-                                    .build();
-
-                            noteRepo.save(noteConverter.fromNoteDtoToNote(noteDto));
-                        }
+                        dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey);
                     }
                 } catch (Exception e) {
                     System.err.println(e);
