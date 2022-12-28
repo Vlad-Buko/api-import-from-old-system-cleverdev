@@ -32,6 +32,17 @@ Requirements:
 After, we back in your application, and need will started to, at command which was sooner.
 
 
+### Note
+
+If isn't want start application, with import data. 
+
+![tg_image_1093104415](https://user-images.githubusercontent.com/72036166/209867837-48fc69b0-1b59-433f-bff3-28bfd2d0c3d8.jpeg)
+
+Then need, added route for main.class in pom.xml
+
+![IMAGE 2022-12-28 23:22:56](https://user-images.githubusercontent.com/72036166/209868019-013135d5-819b-4567-98f3-1d18a12a2e86.jpg)
+
+
 # API
 
 - Default port 4040
