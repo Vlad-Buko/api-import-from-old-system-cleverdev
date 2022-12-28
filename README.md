@@ -19,6 +19,18 @@ Requirements:
 
 - JDK 15
 - Maven
+
+- For starting to need upload repository, at link down
+
+- https://github.com/nulay/cleverdevtest
+
+- Begin, start application with command
+
+```
+    mvn spring-boot:run
+```
+After, we back in your application, and need for started to, at command for start:
+
 - Application starts with command
 
 ```
@@ -41,4 +53,3 @@ Requirements:
 - DB PostgreSQL
 - Swagger UI
 - Rest API
-
