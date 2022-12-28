@@ -29,13 +29,8 @@ Requirements:
 ```
     mvn spring-boot:run
 ```
-After, we back in your application, and need for started to, at command for start:
+After, we back in your application, and need will started to, at command which was sooner.
 
-- Application starts with command
-
-```
-    mvn spring-boot:run
-```
 
 # API
 
