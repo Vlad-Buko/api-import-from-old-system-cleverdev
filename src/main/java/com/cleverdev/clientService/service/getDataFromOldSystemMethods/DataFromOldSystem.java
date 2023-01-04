@@ -31,8 +31,10 @@ public class DataFromOldSystem {
     private final UserService userService;
     private final NoteRepository noteRepo;
     private final NoteConverter noteConverter;
+    private List<Note> listNote = new ArrayList<>();
 
-    public void saveNoteInDB(JSONArray responseDetailsNotes, LinkedHashMap<Object, Object> jsonPatientKey) {
+    public List<Note> saveNoteInDB(JSONArray responseDetailsNotes, LinkedHashMap<Object, Object> jsonPatientKey) {
+
 
 //        List<Note> noteList = noteRepo.findAll();
 //        Set<Note> setNote = new LinkedHashSet<>(noteList);
@@ -58,10 +60,10 @@ public class DataFromOldSystem {
                     .comment((String) jsonNoteKey.get("comments"))
                     .patient(findIdPatientForWriteForNoteEntity)
                     .build();
-
             // Логика проверки на наличие в БД заметки
             // ---
-            noteRepo.save(noteConverter.fromNoteDtoToNote(noteDto));
+            listNote.add(noteConverter.fromNoteDtoToNote(noteDto));
         }
+        return listNote;
     }
 }
