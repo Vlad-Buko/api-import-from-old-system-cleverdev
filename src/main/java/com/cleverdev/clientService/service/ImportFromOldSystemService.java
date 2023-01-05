@@ -88,10 +88,27 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
                 }
             }
         }
-        List <Note> name =  noteRepository.findAll();// из БД
-        Set<Note> names = new HashSet<>(name);
-        for (Note not : names) {
-            System.out.println(not);
+
+        // Работа над созданием логики хранения данных о заметках
+
+//        List<Note> listFromRepository = noteRepository.findAll();
+//        List<Note> listFromAnotherApp = new ArrayList<>(listNote);
+//        List<Note> summ = new ArrayList<>();
+//        summ.addAll(listFromRepository);
+//        summ.addAll(listFromAnotherApp);
+//        Set<Note> listNoteFromSet = new HashSet<>(summ);
+//        System.out.println(summ.size());
+//        System.out.println(listFromAnotherApp.size());
+        noteRepository.deleteAll();
+        try {
+            Thread.sleep(10000);
+            noteRepository.saveAll(listNote);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
+//        List<Note> pers = new ArrayList<>(listNoteFromSet);
+//        noteRepository.saveAll(pers);
+
     }
 }

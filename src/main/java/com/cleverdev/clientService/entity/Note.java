@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
