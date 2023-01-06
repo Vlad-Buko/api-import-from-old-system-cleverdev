@@ -12,8 +12,6 @@ Osrc/main/java/com/cleverdev/clientService/service/converter/PatientConvert.java
 {
 Ksrc/main/java/com/cleverdev/clientService/repository/PatientRepository.java,7/2/7291fbfbec0cb292002a024bb6bdac38c53d1719
 q
-Asrc/main/java/com/cleverdev/clientService/CleverDevNewSystem.java,9/3/93246eeb2257a26daf51c16d0ca47111b4a510a5
-q
 Asrc/main/java/com/cleverdev/clientService/model/PatientModel.java,e/c/ec3666e0b4d02ad0d885660ec0bdeb88936b60ce
 ƒ
 Ssrc/main/java/com/cleverdev/clientService/exceptions/GuidAlreadyExistException.java,7/2/72d0751aa99e9cf6b389073dc213b11859f7c1a0
@@ -33,14 +31,10 @@ Ksrc/main/java/com/cleverdev/clientService/controller/PatientController.java,6/
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 ƒ
 Ssrc/main/java/com/cleverdev/clientService/exceptions/UserAlreadyExistException.java,c/2/c21b27b533e25ec473c503866005c4654facb076
-x
-Hsrc/main/java/com/cleverdev/clientService/controller/UserController.java,6/4/64e20b88b6859cd901e2248d4f65dadcd45cad94
 j
 :src/main/java/com/cleverdev/clientService/dto/UserDto.java,9/d/9d40ee7940757f03f51fb7ffff3c984399f0d43f
 
 Osrc/main/java/com/cleverdev/clientService/exceptions/UserNotFoundException.java,5/6/56ec1a3056735e3f24d60ad38ba755617470abc5
-j
-:src/main/java/com/cleverdev/clientService/entity/User.java,f/5/f51446e4c45296f5300065f25ce849d22e8b9fe5
 m
 =src/main/java/com/cleverdev/clientService/entity/Patient.java,0/9/09b9b008d350f541a4071be3659792c923069d34
 x
@@ -49,3 +43,5 @@ Hsrc/test/java/com/cleverdev/clientService/api/PatientControllerTest.java,0/6/0
 Ksrc/main/java/com/cleverdev/clientService/service/GetJsonFromOldSystem.java,5/1/5143be87a976194bd887fe16c8b468e76440fa6a
 x
 Hsrc/main/java/com/cleverdev/clientService/repository/NoteRepository.java,e/6/e6ba19777090fd7ee3718a85669cc6cb6e8554df
+u
+Esrc/main/java/com/cleverdev/clientService/service/PatientService.java,a/2/a2d7e07ccff7bfce9129bc7bada13cedc5c7b8d6

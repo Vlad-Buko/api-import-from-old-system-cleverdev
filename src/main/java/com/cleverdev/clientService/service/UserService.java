@@ -6,8 +6,11 @@ import com.cleverdev.clientService.service.converter.UsersConverter;
 import com.cleverdev.clientService.dto.UserDto;
 import com.cleverdev.clientService.repository.UserRepository;
 import com.cleverdev.clientService.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,11 +18,15 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-@RequiredArgsConstructor
 @Log
 public class UserService {
+    @Autowired
+    public UserService(UserRepository userRepo) {
+        this.userRepo = userRepo;
+    }
+
     private final UserRepository userRepo;
-    private final UsersConverter userConverter;
+    private UsersConverter userConverter;
 
     public User addUser(UserDto userGet) throws UserAlreadyExistException {
         if ((userRepo.findByLogin(userConverter.fromUserDtoToUser(userGet).getLogin())) == null) {
@@ -42,8 +49,10 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public void deleteUser(String login) {
-        userRepo.findByLogin(login);
+    public User deleteUser(String login) {
+        User user = userRepo.findByLogin(login);
+        userRepo.deleteById(user.getId());
+        return user;
     }
 
     public void saveUserFromOldVersionInNew(String loginUser) {
