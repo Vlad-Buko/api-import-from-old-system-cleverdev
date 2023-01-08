@@ -26,7 +26,7 @@ public class UserService {
     }
 
     private final UserRepository userRepo;
-    private UsersConverter userConverter;
+    public  UsersConverter userConverter;
 
     public User addUser(UserDto userGet) throws UserAlreadyExistException {
         if ((userRepo.findByLogin(userConverter.fromUserDtoToUser(userGet).getLogin())) == null) {
@@ -49,10 +49,14 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public User deleteUser(String login) {
+    public boolean deleteUser(String login) {
         User user = userRepo.findByLogin(login);
-        userRepo.deleteById(user.getId());
-        return user;
+        if (userRepo.findByLogin(login) != null) {
+            userRepo.deleteById(user.getId());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void saveUserFromOldVersionInNew(String loginUser) {

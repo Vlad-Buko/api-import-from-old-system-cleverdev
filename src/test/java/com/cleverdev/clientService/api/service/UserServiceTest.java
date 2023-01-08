@@ -6,6 +6,7 @@ import com.cleverdev.clientService.exceptions.UserAlreadyExistException;
 import com.cleverdev.clientService.repository.UserRepository;
 
 import com.cleverdev.clientService.service.UserService;
+import com.cleverdev.clientService.service.converter.UsersConverter;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -35,11 +36,32 @@ import static org.mockito.ArgumentMatchers.any;
 public class UserServiceTest {
     private UserRepository userRepository;
     private UserService userService;
+    private UsersConverter userConverter;
 
     @Before
     public void setup () {
         userRepository = Mockito.mock(UserRepository.class);
         userService = new UserService(userRepository);
+        userConverter = Mockito.mock(UsersConverter.class);
+    }
+
+    @Test
+    public void checkCreateUser() {
+        List<User> listUserTest = initUserForRepo();
+        UserDto userDto = new UserDto();
+        userDto.setLogin("Misha");
+        User user = new User();
+        Mockito.when(userConverter.fromUserDtoToUser(userDto)).thenReturn(user);
+        Mockito.when(userRepository.findByLogin(user.getLogin())).thenReturn(null);
+        Mockito.when(userRepository.save(userConverter.fromUserDtoToUser(userDto)))
+                .thenReturn(listUserTest.get(3));
+        try {
+            userService.addUser(userDto);
+        } catch (UserAlreadyExistException e) {
+            e.printStackTrace();
+        }
+        User userExpected = userRepository.findByLogin("Mary");
+        Assertions.assertNotNull(userExpected);
     }
 
     @Test
@@ -53,12 +75,23 @@ public class UserServiceTest {
     }
 
     @Test
+    public void saveUserInDb() {
+        List<User> list = initUserForRepo();
+        UserDto userDto = new UserDto();
+        userDto.setLogin("VLad");
+        Mockito.when(userRepository.save(userConverter.fromUserDtoToUser(userDto)));
+        userService.saveUserFromOldVersionInNew("Vlad");
+        Assertions.assertNotNull(userRepository.findByLogin("Vlad"));
+    }
+
+    @Test
     public void deleteUserFromDb() {
         List<User> listUserTest = initUserForRepo();
 
         Mockito.when(userRepository.findByLogin("Mike")).thenReturn(listUserTest.get(0));
-        User usere = userService.deleteUser("Mike");
-        Assertions.assertNull(usere);
+        User actual = userRepository.findByLogin("Mike");
+        Assertions.assertEquals(actual, listUserTest.get(0));
+        Assertions.assertTrue(userService.deleteUser("Mike"));
     }
 
     private List<User> initUserForRepo() {
