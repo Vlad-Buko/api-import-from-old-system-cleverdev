@@ -6,9 +6,6 @@ import com.cleverdev.clientService.service.converter.UsersConverter;
 import com.cleverdev.clientService.dto.UserDto;
 import com.cleverdev.clientService.repository.UserRepository;
 import com.cleverdev.clientService.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,12 +22,15 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
-    private final UserRepository userRepo;
-    public  UsersConverter userConverter;
+    @Autowired
+    private UsersConverter userConverter;
 
-    public User addUser(UserDto userGet) throws UserAlreadyExistException {
+    private final UserRepository userRepo;
+
+    public boolean addUser(UserDto userGet) throws UserAlreadyExistException {
         if ((userRepo.findByLogin(userConverter.fromUserDtoToUser(userGet).getLogin())) == null) {
-            return userRepo.save(userConverter.fromUserDtoToUser(userGet));
+            userRepo.save(userConverter.fromUserDtoToUser(userGet));
+            return true;
         } else {
             throw new UserAlreadyExistException("This login already! Please choose another login!");
         }

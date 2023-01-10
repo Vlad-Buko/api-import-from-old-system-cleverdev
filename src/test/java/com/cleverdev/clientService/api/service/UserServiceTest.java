@@ -3,65 +3,76 @@ package com.cleverdev.clientService.api.service;
 import com.cleverdev.clientService.dto.UserDto;
 import com.cleverdev.clientService.entity.User;
 import com.cleverdev.clientService.exceptions.UserAlreadyExistException;
+import com.cleverdev.clientService.exceptions.UserNotFoundException;
 import com.cleverdev.clientService.repository.UserRepository;
 
 import com.cleverdev.clientService.service.UserService;
 import com.cleverdev.clientService.service.converter.UsersConverter;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
-import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Created by Vladislav Domaniewski
  */
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class UserServiceTest {
-    private UserRepository userRepository;
-    private UserService userService;
-    private UsersConverter userConverter;
 
-    @Before
-    public void setup () {
-        userRepository = Mockito.mock(UserRepository.class);
-        userService = new UserService(userRepository);
-        userConverter = Mockito.mock(UsersConverter.class);
+    @Autowired
+    private UserService userService;
+
+    @MockBean
+    private UsersConverter usersConverter;
+
+    @MockBean
+    private UserRepository userRepository;
+
+    @Test(expected = UserAlreadyExistException.class)
+    public void waitingForAnUserAlreadyException() throws UserAlreadyExistException {
+        List<User> userList = initUserForRepo();
+        UserDto userDto = new UserDto();
+        userDto.setLogin("Misha");
+        User userModel = new User();
+        Mockito.when(usersConverter.fromUserDtoToUser(userDto)).thenReturn(userModel);
+        Mockito.when(userRepository.findByLogin(usersConverter.
+                fromUserDtoToUser(userDto).getLogin()))
+                        .thenReturn(userList.get(2));
+        userService.addUser(userDto);
     }
 
     @Test
-    public void checkCreateUser() {
-        List<User> listUserTest = initUserForRepo();
+    public void saveUserInDb() {
         UserDto userDto = new UserDto();
-        userDto.setLogin("Misha");
-        User user = new User();
-        Mockito.when(userConverter.fromUserDtoToUser(userDto)).thenReturn(user);
-        Mockito.when(userRepository.findByLogin(user.getLogin())).thenReturn(null);
-        Mockito.when(userRepository.save(userConverter.fromUserDtoToUser(userDto)))
-                .thenReturn(listUserTest.get(3));
+        userDto.setLogin("VLad");
+        User userModel = new User();
+        Mockito.when(usersConverter.fromUserDtoToUser(userDto)).thenReturn(userModel);
+        Mockito.when(userRepository.findByLogin(usersConverter.
+                        fromUserDtoToUser(userDto).getLogin()))
+                .thenReturn(null);
         try {
-            userService.addUser(userDto);
+            Assertions.assertTrue(userService.addUser(userDto));
         } catch (UserAlreadyExistException e) {
             e.printStackTrace();
         }
-        User userExpected = userRepository.findByLogin("Mary");
-        Assertions.assertNotNull(userExpected);
+    }
+
+    @Test
+    public void checkGetUser() {
+        List<User> listUser = initUserForRepo();
+
+        Mockito.when(userRepository.getById(2l)).thenReturn(listUser.get(2));
+        User expected = listUser.get(2);
+        User actual = userService.getUser(2l);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -74,14 +85,28 @@ public class UserServiceTest {
         Assertions.assertEquals(expected, result);
     }
 
+    @Test(expected = UserNotFoundException.class)
+    public void catchUserNotFoundException() throws UserNotFoundException {
+        UserDto userDto = new UserDto();
+        userDto.setLogin("Vlad");
+        Mockito.when(userRepository.getById(2l)).thenReturn(null);
+        userService.updateUser(userDto, 2l);
+    }
+
     @Test
-    public void saveUserInDb() {
-        List<User> list = initUserForRepo();
+    public void updateUserInOurDB() {
+        List<User> userList = initUserForRepo();
         UserDto userDto = new UserDto();
         userDto.setLogin("VLad");
-        Mockito.when(userRepository.save(userConverter.fromUserDtoToUser(userDto)));
-        userService.saveUserFromOldVersionInNew("Vlad");
-        Assertions.assertNotNull(userRepository.findByLogin("Vlad"));
+
+        Mockito.when(userRepository.getById(2l)).thenReturn(userList.get(2));
+        try {
+            userService.updateUser(userDto, 2l);
+            String expectedName = "Vlad";
+            Assertions.assertEquals(expectedName, userList.get(2).getLogin());
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -121,21 +146,5 @@ public class UserServiceTest {
         userForty.setList(null);
 
         return List.of(userFirst, userSecond, userThirty, userForty);
-    }
-
-    @Test
-    @Ignore
-    public void checkAddedUserTest() throws IOException {
-//        try {
-
-//        } catch (User)
-        Throwable thrown = catchThrowable(() -> {
-            User user = new User();
-            user.setLogin("Vladislav");
-            userRepository.save(user);
-            userService.addUser(new UserDto("Vladislav"));
-        });
-        assertThat(thrown).isInstanceOf(UserAlreadyExistException.class);
-        assertThat(thrown.getMessage()).isNotBlank();
     }
 }

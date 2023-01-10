@@ -2,7 +2,6 @@ package com.cleverdev.clientService.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import net.bytebuddy.build.HashCodeAndEqualsPlugin;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
