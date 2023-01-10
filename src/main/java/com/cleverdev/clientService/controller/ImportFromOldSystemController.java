@@ -1,5 +1,6 @@
 package com.cleverdev.clientService.controller;
 
+import com.cleverdev.clientService.entity.Note;
 import com.cleverdev.clientService.service.ImportFromOldSystemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -10,6 +11,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -25,6 +31,7 @@ public class ImportFromOldSystemController {
     private String urlForClients;
     private final ImportFromOldSystemService importService;
 
+
     // Запуск приложения каждые 2 часа в 15 минут первого часа
     @Scheduled(cron = "* 15 0/2 * * *")
     @PostMapping("/import-from-old-system")
@@ -34,4 +41,13 @@ public class ImportFromOldSystemController {
         importService.importFromOldSystem(arrayPatientsFromOldSystem);
         return ResponseEntity.ok().build();
     }
+
+//    @PostMapping("/test")
+//    public ResponseEntity<Void> saveCollection() {
+//        List<Note> setNotes = noteRepository.findAll();
+//        noteRepository.deleteAll();
+//        System.out.println(noteRepository.findAll());
+//        noteRepository.saveAll(setNotes);
+//        return ResponseEntity.ok().build();
+//    }
 }

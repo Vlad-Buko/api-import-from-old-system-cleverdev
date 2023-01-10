@@ -6,8 +6,8 @@ import com.cleverdev.clientService.service.converter.UsersConverter;
 import com.cleverdev.clientService.dto.UserDto;
 import com.cleverdev.clientService.repository.UserRepository;
 import com.cleverdev.clientService.entity.User;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,15 +15,22 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-@RequiredArgsConstructor
 @Log
 public class UserService {
-    private final UserRepository userRepo;
-    private final UsersConverter userConverter;
+    @Autowired
+    public UserService(UserRepository userRepo) {
+        this.userRepo = userRepo;
+    }
 
-    public User addUser(UserDto userGet) throws UserAlreadyExistException {
+    @Autowired
+    private UsersConverter userConverter;
+
+    private final UserRepository userRepo;
+
+    public boolean addUser(UserDto userGet) throws UserAlreadyExistException {
         if ((userRepo.findByLogin(userConverter.fromUserDtoToUser(userGet).getLogin())) == null) {
-            return userRepo.save(userConverter.fromUserDtoToUser(userGet));
+            userRepo.save(userConverter.fromUserDtoToUser(userGet));
+            return true;
         } else {
             throw new UserAlreadyExistException("This login already! Please choose another login!");
         }
@@ -42,8 +49,14 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public void deleteUser(String login) {
-        userRepo.findByLogin(login);
+    public boolean deleteUser(String login) {
+        User user = userRepo.findByLogin(login);
+        if (userRepo.findByLogin(login) != null) {
+            userRepo.deleteById(user.getId());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void saveUserFromOldVersionInNew(String loginUser) {

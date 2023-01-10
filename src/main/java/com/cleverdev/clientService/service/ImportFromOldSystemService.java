@@ -1,5 +1,7 @@
 package com.cleverdev.clientService.service;
 
+import com.cleverdev.clientService.entity.Note;
+import com.cleverdev.clientService.repository.NoteRepository;
 import com.cleverdev.clientService.service.converter.PatientConvert;
 import com.cleverdev.clientService.dto.PatientDto;
 import com.cleverdev.clientService.service.enums.PatientStatusEnum;
@@ -14,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 /**
  * Created by Vladislav Domaniewski
@@ -32,6 +34,8 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
     private String dateFrom;
     @Value("${app.importData.dateTo}")
     private String dateTo;
+    private List<Note> listNote = new ArrayList<>();
+    private final NoteRepository noteRepository;
 
     @Override
     public JSONArray getJsonObjFromOldSystem(String urlClient) {
@@ -47,7 +51,7 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
         for (Object ob : getObjFromOldSystem) {
             PatientDto patientDto;
             LinkedHashMap<Object, Object> jsonPatientKey = (LinkedHashMap) ob;
-            ;
+
             patientDto = PatientDto.builder()
                     .agency((String) jsonPatientKey.get("agency"))
                     .createdDateTime((LocalDateTime) jsonPatientKey.get("createDateTime"))
@@ -77,12 +81,34 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
                     if (responseDetailsNotes.size() == 0) {
                         continue;
                     } else {
-                        dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey);
+                        listNote.addAll(dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey));
                     }
                 } catch (Exception e) {
                     System.err.println(e);
                 }
             }
         }
+
+        // Работа над созданием логики хранения данных о заметках
+
+//        List<Note> listFromRepository = noteRepository.findAll();
+//        List<Note> listFromAnotherApp = new ArrayList<>(listNote);
+//        List<Note> summ = new ArrayList<>();
+//        summ.addAll(listFromRepository);
+//        summ.addAll(listFromAnotherApp);
+//        Set<Note> listNoteFromSet = new HashSet<>(summ);
+//        System.out.println(summ.size());
+//        System.out.println(listFromAnotherApp.size());
+        noteRepository.deleteAll();
+        try {
+            Thread.sleep(10000);
+            noteRepository.saveAll(listNote);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+//        List<Note> pers = new ArrayList<>(listNoteFromSet);
+//        noteRepository.saveAll(pers);
+
     }
 }
