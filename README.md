@@ -52,7 +52,9 @@ Then need, added route for main.class in pom.xml
 
 - Spring Boot 
 - Spring Data JPA
-- Spring JUnit
+- Spring Test
+- JUnit
+- Mockito
 - Java jdk 15
 - Maven 
 - Lombok
