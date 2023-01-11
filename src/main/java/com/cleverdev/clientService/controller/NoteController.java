@@ -1,6 +1,6 @@
 package com.cleverdev.clientService.controller;
 
-import com.cleverdev.clientService.exceptions.NoteNoteFoundException;
+import com.cleverdev.clientService.exceptions.NoteNotFoundException;
 import com.cleverdev.clientService.model.NoteModel;
 import com.cleverdev.clientService.service.NoteService;
 import lombok.RequiredArgsConstructor;
@@ -46,11 +46,11 @@ public class NoteController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteNoteFromDB(@PathVariable Long idNote)
-            throws NoteNoteFoundException{
+            throws NoteNotFoundException {
         try {
             noteService.deleteNoteFromSystem(idNote);
-        } catch (NoteNoteFoundException e) {
-            throw new NoteNoteFoundException("Note was be not found! Please, write another id!");
+        } catch (NoteNotFoundException e) {
+            throw new NoteNotFoundException("Note was be not found! Please, write another id!");
         }
         log.info("NOTE was be delete!");
         return ResponseEntity.ok().build();

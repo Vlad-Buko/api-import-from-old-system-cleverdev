@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,7 +25,9 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class ImportFromOldSystemService implements GetJsonFromOldSystem {
+public class ImportFromOldSystemService  {
+    ParameterizedTypeReference<JSONArray> typeRef = new ParameterizedTypeReference<>() {
+    };
     private final PatientRepository patientRepo;
     private final PatientConvert patientConvert;
     private final DataFromOldSystem dataFromOldSystem;
@@ -37,7 +40,6 @@ public class ImportFromOldSystemService implements GetJsonFromOldSystem {
     private List<Note> listNote = new ArrayList<>();
     private final NoteRepository noteRepository;
 
-    @Override
     public JSONArray getJsonObjFromOldSystem(String urlClient) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
