@@ -4,14 +4,13 @@ import com.cleverdev.clientService.dto.NoteDto;
 import com.cleverdev.clientService.entity.Note;
 import com.cleverdev.clientService.entity.Patient;
 import com.cleverdev.clientService.entity.User;
-import com.cleverdev.clientService.exceptions.NoteNoteFoundException;
+import com.cleverdev.clientService.exceptions.NoteNotFoundException;
 import com.cleverdev.clientService.model.NoteModel;
 import com.cleverdev.clientService.repository.UserRepository;
 import com.cleverdev.clientService.service.converter.NoteConverter;
 import com.cleverdev.clientService.repository.NoteRepository;
 import com.cleverdev.clientService.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONArray;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,7 +22,7 @@ import java.util.HashMap;
 
 @Service()
 @RequiredArgsConstructor
-public class NoteService implements GetJsonFromOldSystem {
+public class NoteService {
     private final PatientRepository patientRepo;
     private final UserRepository userRepo;
     private final NoteRepository noteRepo;
@@ -53,16 +52,12 @@ public class NoteService implements GetJsonFromOldSystem {
         return noteRepo.findByCreatedByUserId(user.getId());
     }
 
-    public boolean deleteNoteFromSystem(Long id) throws NoteNoteFoundException {
+    public boolean deleteNoteFromSystem(Long id) throws NoteNotFoundException {
         if (noteRepo.findById(id).isEmpty()) {
-            throw new NoteNoteFoundException();
+            throw new NoteNotFoundException();
         }
         noteRepo.deleteById(id);
         return true;
     }
 
-    @Override
-    public JSONArray getJsonObjFromOldSystem(String urlClient) {
-        return null;
-    }
 }

@@ -3,23 +3,13 @@
 mvnw.cmd,1/f/1f1763f358c257ea3515417352b82b0165647ad1
 ~
 Nsrc/main/java/com/cleverdev/clientService/service/enums/PatientStatusEnum.java,4/0/4041f8d7d6faeec0811b896756fdbda9c710c780
-
-Osrc/main/java/com/cleverdev/clientService/service/converter/PatientConvert.java,8/b/8bd153e14daccf776ffe60a794b62b619f548210
 {
 Ksrc/main/java/com/cleverdev/clientService/repository/PatientRepository.java,7/2/7291fbfbec0cb292002a024bb6bdac38c53d1719
-€
-Psrc/main/java/com/cleverdev/clientService/exceptions/NoteNoteFoundException.java,0/6/06d2c265031a36446e0bab6b96f9b4c4642af10c
-9
-	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-ƒ
-Ssrc/main/java/com/cleverdev/clientService/exceptions/UserAlreadyExistException.java,c/2/c21b27b533e25ec473c503866005c4654facb076
 
 Osrc/main/java/com/cleverdev/clientService/exceptions/UserNotFoundException.java,5/6/56ec1a3056735e3f24d60ad38ba755617470abc5
-{
-Ksrc/main/java/com/cleverdev/clientService/service/GetJsonFromOldSystem.java,5/1/5143be87a976194bd887fe16c8b468e76440fa6a
 x
 Hsrc/main/java/com/cleverdev/clientService/repository/NoteRepository.java,e/6/e6ba19777090fd7ee3718a85669cc6cb6e8554df
-u
-Esrc/main/java/com/cleverdev/clientService/service/PatientService.java,a/2/a2d7e07ccff7bfce9129bc7bada13cedc5c7b8d6
 ‡
 Wsrc/main/java/com/cleverdev/clientService/controller/ImportFromOldSystemController.java,0/f/0f4f761e5b709a046ce538365e1ea5718cd8d037
+9
+	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
