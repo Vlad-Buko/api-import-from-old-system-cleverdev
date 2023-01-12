@@ -49,7 +49,7 @@ public class ImportFromOldSystemService  {
         return response.getBody();
     }
 
-    public void importFromOldSystem(JSONArray getObjFromOldSystem) {
+    public String importFromOldSystem(JSONArray getObjFromOldSystem) {
         for (Object ob : getObjFromOldSystem) {
             PatientDto patientDto;
             LinkedHashMap<Object, Object> jsonPatientKey = (LinkedHashMap) ob;
@@ -86,31 +86,15 @@ public class ImportFromOldSystemService  {
                         listNote.addAll(dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey));
                     }
                 } catch (Exception e) {
-                    System.err.println(e);
+//                    System.err.println(e);
                 }
             }
         }
-
-        // Работа над созданием логики хранения данных о заметках
-
-//        List<Note> listFromRepository = noteRepository.findAll();
-//        List<Note> listFromAnotherApp = new ArrayList<>(listNote);
-//        List<Note> summ = new ArrayList<>();
-//        summ.addAll(listFromRepository);
-//        summ.addAll(listFromAnotherApp);
-//        Set<Note> listNoteFromSet = new HashSet<>(summ);
-//        System.out.println(summ.size());
-//        System.out.println(listFromAnotherApp.size());
-        noteRepository.deleteAll();
-        try {
-            Thread.sleep(10000);
             noteRepository.saveAll(listNote);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+// Прописывание в логи
 
-//        List<Note> pers = new ArrayList<>(listNoteFromSet);
-//        noteRepository.saveAll(pers);
-
+        List<Note> sizeCollection = noteRepository.findAll();
+        String piecesNote = "Добавлено заметок: " + sizeCollection.size();
+        return piecesNote;
     }
 }

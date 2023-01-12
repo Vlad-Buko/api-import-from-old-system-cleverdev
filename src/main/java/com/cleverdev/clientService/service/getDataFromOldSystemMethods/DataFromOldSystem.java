@@ -29,15 +29,11 @@ public class DataFromOldSystem {
     private final PatientRepository patientRepo;
     private final UserRepository userRepo;
     private final UserService userService;
-    private final NoteRepository noteRepo;
     private final NoteConverter noteConverter;
+    private final NoteRepository noteRepository;
     private List<Note> listNote = new ArrayList<>();
 
     public List<Note> saveNoteInDB(JSONArray responseDetailsNotes, LinkedHashMap<Object, Object> jsonPatientKey) {
-
-
-//        List<Note> noteList = noteRepo.findAll();
-//        Set<Note> setNote = new LinkedHashSet<>(noteList);
 
         for (Object it : responseDetailsNotes) {
             Patient findIdPatientForWriteForNoteEntity = patientRepo.findByOldClientGuid((String) jsonPatientKey.get("guid"));
@@ -62,7 +58,11 @@ public class DataFromOldSystem {
                     .build();
             // Логика проверки на наличие в БД заметки
             // ---
-            listNote.add(noteConverter.fromNoteDtoToNote(noteDto));
+            Optional<Note> findData = noteRepository.findByCreatedDateTime(noteDto.getCreatedDateTime());
+            if (findData.isPresent()) {
+                continue;
+            }
+                listNote.add(noteConverter.fromNoteDtoToNote(noteDto));
         }
         return listNote;
     }
