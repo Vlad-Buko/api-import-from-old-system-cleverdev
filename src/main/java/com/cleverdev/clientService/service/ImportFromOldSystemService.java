@@ -1,6 +1,7 @@
 package com.cleverdev.clientService.service;
 
 import com.cleverdev.clientService.entity.Note;
+import com.cleverdev.clientService.entity.Patient;
 import com.cleverdev.clientService.repository.NoteRepository;
 import com.cleverdev.clientService.service.converter.PatientConvert;
 import com.cleverdev.clientService.dto.PatientDto;
@@ -86,7 +87,7 @@ public class ImportFromOldSystemService  {
                         listNote.addAll(dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey));
                     }
                 } catch (Exception e) {
-//                    System.err.println(e);
+                    System.err.println(e);
                 }
             }
         }
@@ -94,7 +95,9 @@ public class ImportFromOldSystemService  {
 // Прописывание в логи
 
         List<Note> sizeCollection = noteRepository.findAll();
-        String piecesNote = "Добавлено заметок: " + sizeCollection.size();
+        List<Patient> sizePatient = patientRepo.findAll();
+        String piecesNote = "Добавлено заметок: " + sizeCollection.size() + ", " +
+                "пациентов: " + sizePatient.size();
         return piecesNote;
     }
 }

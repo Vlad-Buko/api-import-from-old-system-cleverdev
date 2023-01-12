@@ -5,6 +5,7 @@ import com.cleverdev.clientService.entity.Note;
 import com.cleverdev.clientService.entity.Patient;
 import com.cleverdev.clientService.entity.User;
 import com.cleverdev.clientService.repository.NoteRepository;
+import com.cleverdev.clientService.repository.NoteStatusRepository;
 import com.cleverdev.clientService.repository.PatientRepository;
 import com.cleverdev.clientService.repository.UserRepository;
 import com.cleverdev.clientService.service.UserService;
@@ -31,6 +32,7 @@ public class DataFromOldSystem {
     private final UserService userService;
     private final NoteConverter noteConverter;
     private final NoteRepository noteRepository;
+    private final NoteStatusRepository noteStatusRepository;
     private List<Note> listNote = new ArrayList<>();
 
     public List<Note> saveNoteInDB(JSONArray responseDetailsNotes, LinkedHashMap<Object, Object> jsonPatientKey) {
