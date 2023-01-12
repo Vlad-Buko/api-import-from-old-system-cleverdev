@@ -38,6 +38,6 @@ public class Patient {
     @Enumerated(EnumType.ORDINAL)
     private PatientStatusEnum statusId;
 
-    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "patient")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
     private List<Note> listNoteForOnePatient;
 }

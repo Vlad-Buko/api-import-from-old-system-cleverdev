@@ -31,9 +31,9 @@ public class User {
     @Column(name = "login")
     private String login;
 
-    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "createdByUserId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdByUserId")
     private List<Note> listNote;
 
-    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "lastModifiedByUserId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lastModifiedByUserId")
     private List<Note> list;
 }

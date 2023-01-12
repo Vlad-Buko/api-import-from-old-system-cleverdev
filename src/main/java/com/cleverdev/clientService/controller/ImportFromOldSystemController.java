@@ -38,7 +38,8 @@ public class ImportFromOldSystemController {
     public ResponseEntity<Void> importFromOldSystem()
     {
         JSONArray arrayPatientsFromOldSystem = importService.getJsonObjFromOldSystem(urlForClients);
-        importService.importFromOldSystem(arrayPatientsFromOldSystem);
+        String info = importService.importFromOldSystem(arrayPatientsFromOldSystem);
+        log.info(info);
         return ResponseEntity.ok().build();
     }
 
