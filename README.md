@@ -13,7 +13,7 @@ Method testing was done using Swagger.
 
 # Startup
 
-This application is based on Spring Boot (v.2.6.3)
+This application is based on Spring Boot (v.2.7.3)
 
 Requirements:
 
