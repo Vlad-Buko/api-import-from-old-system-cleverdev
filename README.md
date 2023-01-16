@@ -61,3 +61,4 @@ Then need, added route for main.class in pom.xml
 - DB PostgreSQL
 - Swagger UI
 - Rest API
+- Postman
