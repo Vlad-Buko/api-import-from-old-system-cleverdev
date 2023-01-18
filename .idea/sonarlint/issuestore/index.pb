@@ -13,10 +13,6 @@ Osrc/main/java/com/cleverdev/clientService/exceptions/UserNotFoundException.java
 Ssrc/main/java/com/cleverdev/clientService/exceptions/UserAlreadyExistException.java,c/2/c21b27b533e25ec473c503866005c4654facb076
 
 Osrc/main/java/com/cleverdev/clientService/service/converter/PatientConvert.java,8/b/8bd153e14daccf776ffe60a794b62b619f548210
-r
-Bsrc/main/java/com/cleverdev/clientService/service/UserService.java,d/b/dbe33e3b924e2545a56dd8c9aa50ffde41d337d6
-q
-Asrc/main/java/com/cleverdev/clientService/CleverDevNewSystem.java,9/3/93246eeb2257a26daf51c16d0ca47111b4a510a5
 z
 Jsrc/test/java/com/cleverdev/clientService/api/service/UserServiceTest.java,a/6/a60f9d025ecafc6025d88c7d2341343053933392
 
@@ -25,7 +21,5 @@ Osrc/main/java/com/cleverdev/clientService/exceptions/NoteNotFoundException.java
 Ksrc/main/java/com/cleverdev/clientService/controller/PatientController.java,6/d/6d06e8f8ccd885f1f7bacedfb052ffcab60002dc
 ‚
 Rsrc/main/java/com/cleverdev/clientService/exceptions/PatientNotFoundException.java,f/b/fbeb5d6b203d511de56ce63019f534c683d3a514
-u
-Esrc/main/java/com/cleverdev/clientService/service/PatientService.java,a/2/a2d7e07ccff7bfce9129bc7bada13cedc5c7b8d6
 }
 Msrc/test/java/com/cleverdev/clientService/api/service/PatientServiceTest.java,f/8/f81281516fabeffa3a322fa9d37b2edbbf18c12d

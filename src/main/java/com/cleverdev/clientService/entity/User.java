@@ -32,8 +32,8 @@ public class User {
     private String login;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdByUserId")
-    private List<Note> listNote;
+    private List<Note> listNoteForUserCreated;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "lastModifiedByUserId")
-    private List<Note> list;
+    private List<Note> listNoteForUserUpdated;
 }

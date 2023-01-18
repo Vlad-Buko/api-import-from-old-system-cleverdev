@@ -12,7 +12,7 @@
 
     <groupId>org.cleverdev.clientservice</groupId>
     <artifactId>api-for-cleverdev</artifactId>
-    <version>api-new-system-v1.0.0st</version>
+    <version>api-new-system-v1.0.2</version>
     <name>cleverdevtest-client-service</name>
     <description>cleverdevtest-client-service</description>
 

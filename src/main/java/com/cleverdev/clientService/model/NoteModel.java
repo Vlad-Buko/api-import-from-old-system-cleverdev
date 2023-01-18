@@ -11,4 +11,6 @@ import org.springframework.stereotype.Component;
 @Data
 public class NoteModel {
     private String note;
+    private String userLogin;
+    private String patientGuid;
 }

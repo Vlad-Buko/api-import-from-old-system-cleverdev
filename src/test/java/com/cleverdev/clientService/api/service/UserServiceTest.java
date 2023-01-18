@@ -127,23 +127,23 @@ public class UserServiceTest {
 
         userFirst.setId(1l);
         userFirst.setLogin("Mike");
-        userFirst.setListNote(null);
-        userFirst.setList(null);
+        userFirst.setListNoteForUserCreated(null);
+        userFirst.setListNoteForUserUpdated(null);
 
         userSecond.setId(2l);
         userSecond.setLogin("Grommew");
-        userSecond.setListNote(null);
-        userSecond.setList(null);
+        userFirst.setListNoteForUserCreated(null);
+        userFirst.setListNoteForUserUpdated(null);
 
         userThirty.setId(3l);
         userThirty.setLogin("Misha");
-        userThirty.setListNote(null);
-        userThirty.setList(null);
+        userFirst.setListNoteForUserCreated(null);
+        userFirst.setListNoteForUserUpdated(null);
 
         userForty.setId(4l);
         userForty.setLogin("Viktor Moses");
-        userForty.setListNote(null);
-        userForty.setList(null);
+        userFirst.setListNoteForUserCreated(null);
+        userFirst.setListNoteForUserUpdated(null);
 
         return List.of(userFirst, userSecond, userThirty, userForty);
     }
