@@ -37,7 +37,6 @@ public class ImportFromOldSystemService  {
     private String dateFrom;
     @Value("${app.importData.dateTo}")
     private String dateTo;
-    private List<Note> listNote = new ArrayList<>();
     private final NoteRepository noteRepository;
 
     public JSONArray getJsonObjFromOldSystem(String urlClient) {
@@ -83,17 +82,13 @@ public class ImportFromOldSystemService  {
                     if (responseDetailsNotes.size() == 0) {
                         continue;
                     } else {
-                        listNote.addAll(dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey));
+                        dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey);
                     }
                 } catch (Exception e) {
-//                    System.err.println(e);
+                    System.out.println(e);
                 }
             }
         }
-            noteRepository.saveAll(listNote);
-// Прописывание в логи
-
-        String piecesNote = "Добавлено заметок: " + listNote.size();
-        return piecesNote;
+        return "Добавлено заметок: " + dataFromOldSystem.getCountNote();
     }
 }

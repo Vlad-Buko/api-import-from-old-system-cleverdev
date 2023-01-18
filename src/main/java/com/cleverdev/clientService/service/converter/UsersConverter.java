@@ -16,9 +16,9 @@ public class UsersConverter {
                 .build();
     }
 
-//    public UserDto fromUserToUserDto(User user) {
-//        return UserDto.builder()
-//                .login(user.getLogin())
-//                .build();
-//    }
+    public UserDto fromUserToUserDto(User user) {
+        return UserDto.builder()
+                .login(user.getLogin())
+                .build();
+    }
 }

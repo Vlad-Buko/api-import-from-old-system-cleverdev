@@ -31,23 +31,24 @@ public class NoteService {
     private final NoteRepository noteRepo;
     private final NoteConverter noteConvert;
 
-    public Note createNewNote(NoteModel noteModel, String userLogin, String patientGuid) {
-        User user = userRepo.findByLogin(userLogin);
-        Patient patient = patientRepo.findByOldClientGuid(patientGuid);
-        NoteDto newNoteDto = noteConvert.fromNoteModelToNoteDto(noteModel);
-        newNoteDto.setCreatedDateTime(LocalDateTime.now());
-        newNoteDto.setLastModifiedDateTime(LocalDateTime.now());
-        newNoteDto.setCreatedByUserId(user);
-        newNoteDto.setLastModifiedByUserId(user);
-        newNoteDto.setPatient(patient);
-        return noteRepo.save(noteConvert.fromNoteDtoToNote(newNoteDto));
+    public Note createNewNote(NoteModel noteModel) {
+        User user = userRepo.findByLogin(noteModel.getUserLogin());
+        Patient patient = patientRepo.findByOldClientGuid(noteModel.getPatientGuid());
+        NoteDto noteDto = NoteDto.builder()
+                        .createdDateTime(LocalDateTime.now())
+                        .lastModifiedDateTime(LocalDateTime.now())
+                        .createdByUserId(user)
+                        .lastModifiedByUserId(user)
+                        .patient(patient).build();
+        return noteRepo.save(noteConvert.fromNoteDtoToNote(noteDto));
     }
 
-    public void updateOneNote(NoteModel noteModel, Long idNote) {
+    public Note updateOneNote(NoteModel noteModel, Long idNote) {
         Note note = noteRepo.getById(idNote);
         note.setComment(noteModel.getNote());
 //        note.setLastModifiedByUserId();
-        noteRepo.save(note);
+//        noteRepo.save(note);
+        return null;
     }
 
     public HashMap<Object, Object> showNotes(String userLogin) {

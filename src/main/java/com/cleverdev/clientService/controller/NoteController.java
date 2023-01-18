@@ -23,10 +23,8 @@ public class NoteController {
     private final NoteService noteService;
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createNewNote(@RequestBody NoteModel noteModel,
-                                              @RequestParam String userLogin,
-                                              @RequestParam String patientGuidOrLoginId) {
-        noteService.createNewNote(noteModel, userLogin, patientGuidOrLoginId);
+    public ResponseEntity<Void> createNewNote(@RequestBody NoteModel noteModel) {
+        noteService.createNewNote(noteModel);
         log.info("Note was be added!");
         return ResponseEntity.ok().build();
     }

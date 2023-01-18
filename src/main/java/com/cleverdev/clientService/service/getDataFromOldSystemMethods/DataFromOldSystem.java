@@ -33,9 +33,9 @@ public class DataFromOldSystem {
     private final NoteConverter noteConverter;
     private final NoteRepository noteRepository;
     private final NoteService noteService;
-    private List<Note> listNote = new ArrayList<>();
+    private long countNote = 0;
 
-    public List<Note> saveNoteInDB(JSONArray responseDetailsNotes, LinkedHashMap<Object, Object> jsonPatientKey) {
+    public Long saveNoteInDB(JSONArray responseDetailsNotes, LinkedHashMap<Object, Object> jsonPatientKey) {
 
         for (Object it : responseDetailsNotes) {
             Patient findIdPatientForWriteForNoteEntity = patientRepo.findByOldClientGuid((String) jsonPatientKey.get("guid"));
@@ -55,17 +55,15 @@ public class DataFromOldSystem {
                     findIdUserForWriteUserEntity, jsonNoteKey);
             Optional<Note> findData = noteRepository.findByCreatedDateTime(noteDto.getCreatedDateTime());
             if (findData.isEmpty()) {
-                listNote.add(noteConverter.fromNoteDtoToNote(noteDto));
+                noteRepository.save(noteConverter.fromNoteDtoToNote(noteDto));
+                countNote++;
             }
-//            if (!findData.get().getComment().equals(noteDto.getComment())){
-//                Long id = findData.get().getId();
-//                noteRepository.deleteById(id);
-//                Note note = noteConverter.fromNoteDtoToNote(noteDto);
-//                note.setId(id);
-//                listNote.add(note);
-//            }
-
         }
-        return listNote;
+        return countNote;
+    }
+
+    public long getCountNote() {
+        return countNote;
     }
 }
+
