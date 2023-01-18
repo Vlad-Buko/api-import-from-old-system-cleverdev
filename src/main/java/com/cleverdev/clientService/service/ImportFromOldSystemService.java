@@ -93,8 +93,7 @@ public class ImportFromOldSystemService  {
             noteRepository.saveAll(listNote);
 // Прописывание в логи
 
-        List<Note> sizeCollection = noteRepository.findAll();
-        String piecesNote = "Добавлено заметок: " + sizeCollection.size();
+        String piecesNote = "Добавлено заметок: " + listNote.size();
         return piecesNote;
     }
 }

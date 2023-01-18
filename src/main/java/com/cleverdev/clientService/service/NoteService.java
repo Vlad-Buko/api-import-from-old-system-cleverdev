@@ -14,7 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Vladislav Domaniewski
@@ -58,6 +61,23 @@ public class NoteService {
         }
         noteRepo.deleteById(id);
         return true;
+    }
+
+    public NoteDto createdNoteFromOldSystem(Patient findIdPatientForWriteForNoteEntity,
+                                            User findIdUserForWriteUserEntity,
+                                            Map jsonNoteKey) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault());
+        NoteDto noteDto;
+
+        noteDto = NoteDto.builder()
+                .createdDateTime(LocalDateTime.parse((String) jsonNoteKey.get("createdDateTime"), formatter))
+                .lastModifiedDateTime(LocalDateTime.parse(jsonNoteKey.get("modifiedDateTime").toString(), formatter))
+                .createdByUserId(findIdUserForWriteUserEntity)
+                .lastModifiedByUserId(findIdUserForWriteUserEntity)
+                .comment((String) jsonNoteKey.get("comments"))
+                .patient(findIdPatientForWriteForNoteEntity)
+                .build();
+        return noteDto;
     }
 
 }

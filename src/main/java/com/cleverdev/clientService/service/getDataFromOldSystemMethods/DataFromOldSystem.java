@@ -7,6 +7,7 @@ import com.cleverdev.clientService.entity.User;
 import com.cleverdev.clientService.repository.NoteRepository;
 import com.cleverdev.clientService.repository.PatientRepository;
 import com.cleverdev.clientService.repository.UserRepository;
+import com.cleverdev.clientService.service.NoteService;
 import com.cleverdev.clientService.service.UserService;
 import com.cleverdev.clientService.service.converter.NoteConverter;
 import lombok.RequiredArgsConstructor;
@@ -31,16 +32,15 @@ public class DataFromOldSystem {
     private final UserService userService;
     private final NoteConverter noteConverter;
     private final NoteRepository noteRepository;
+    private final NoteService noteService;
     private List<Note> listNote = new ArrayList<>();
 
     public List<Note> saveNoteInDB(JSONArray responseDetailsNotes, LinkedHashMap<Object, Object> jsonPatientKey) {
 
         for (Object it : responseDetailsNotes) {
             Patient findIdPatientForWriteForNoteEntity = patientRepo.findByOldClientGuid((String) jsonPatientKey.get("guid"));
-            NoteDto noteDto;
 
             LinkedHashMap<Object, Object> jsonNoteKey = (LinkedHashMap) it;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault());
 
             User findIdUserForWriteUserEntity = userRepo.findByLogin((String) jsonNoteKey.get("loggedUser"));  // 0
             if (findIdUserForWriteUserEntity == null) {
@@ -48,21 +48,23 @@ public class DataFromOldSystem {
                 User findIfNotFound = userRepo.findByLogin((String) jsonNoteKey.get("loggedUser"));
                 findIdUserForWriteUserEntity = findIfNotFound;
             }
-            noteDto = NoteDto.builder()
-                    .createdDateTime(LocalDateTime.parse((String) jsonNoteKey.get("createdDateTime"), formatter))
-                    .lastModifiedDateTime(LocalDateTime.parse(jsonNoteKey.get("modifiedDateTime").toString(), formatter))
-                    .createdByUserId(findIdUserForWriteUserEntity)
-                    .lastModifiedByUserId(findIdUserForWriteUserEntity)
-                    .comment((String) jsonNoteKey.get("comments"))
-                    .patient(findIdPatientForWriteForNoteEntity)
-                    .build();
+
             // Логика проверки на наличие в БД заметки
             // ---
+            NoteDto noteDto = noteService.createdNoteFromOldSystem(findIdPatientForWriteForNoteEntity,
+                    findIdUserForWriteUserEntity, jsonNoteKey);
             Optional<Note> findData = noteRepository.findByCreatedDateTime(noteDto.getCreatedDateTime());
-            if (findData.isPresent()) {
-                continue;
-            }
+            if (findData.isEmpty()) {
                 listNote.add(noteConverter.fromNoteDtoToNote(noteDto));
+            }
+//            if (!findData.get().getComment().equals(noteDto.getComment())){
+//                Long id = findData.get().getId();
+//                noteRepository.deleteById(id);
+//                Note note = noteConverter.fromNoteDtoToNote(noteDto);
+//                note.setId(id);
+//                listNote.add(note);
+//            }
+
         }
         return listNote;
     }
