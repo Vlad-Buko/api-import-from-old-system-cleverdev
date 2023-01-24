@@ -65,5 +65,9 @@ public class DataFromOldSystem {
     public long getCountNote() {
         return countNote;
     }
+
+    public void setCountNote(long countNote) {
+        this.countNote = countNote;
+    }
 }
 

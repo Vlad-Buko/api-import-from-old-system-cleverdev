@@ -1,6 +1,7 @@
 package com.cleverdev.clientService.controller;
 
 import com.cleverdev.clientService.exceptions.NoteNotFoundException;
+import com.cleverdev.clientService.exceptions.UserNotFoundException;
 import com.cleverdev.clientService.model.NoteModel;
 import com.cleverdev.clientService.service.NoteService;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,17 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 @ControllerAdvice
 public class NoteController {
+    org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(NoteController.class);
     private final NoteService noteService;
 
     @PostMapping("/create")
     public ResponseEntity<Void> createNewNote(@RequestBody NoteModel noteModel) {
-        noteService.createNewNote(noteModel);
-        log.info("Note was be added!");
+        try {
+            noteService.createNewNote(noteModel);
+            logger.info("Note was be added!");
+        } catch (UserNotFoundException e) {
+            logger.error("Note isn't be added, because user not found");
+        }
         return ResponseEntity.ok().build();
     }
 
@@ -43,14 +49,13 @@ public class NoteController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteNoteFromDB(@PathVariable Long idNote)
-            throws NoteNotFoundException {
+    public ResponseEntity<Void> deleteNoteFromDB(@RequestParam Long idNote)  {
         try {
-            noteService.deleteNoteFromSystem(idNote);
+            noteService.deleteNoteFromSystem(2l);
+            logger.info("Note be deleted");
         } catch (NoteNotFoundException e) {
-            throw new NoteNotFoundException("Note was be not found! Please, write another id!");
+            logger.error("Note was be not found! Please, write another id!");
         }
-        log.info("NOTE was be delete!");
         return ResponseEntity.ok().build();
     }
 }

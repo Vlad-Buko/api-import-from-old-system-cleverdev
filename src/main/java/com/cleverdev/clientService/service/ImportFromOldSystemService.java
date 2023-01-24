@@ -1,6 +1,5 @@
 package com.cleverdev.clientService.service;
 
-import com.cleverdev.clientService.entity.Note;
 import com.cleverdev.clientService.repository.NoteRepository;
 import com.cleverdev.clientService.service.converter.PatientConvert;
 import com.cleverdev.clientService.dto.PatientDto;
