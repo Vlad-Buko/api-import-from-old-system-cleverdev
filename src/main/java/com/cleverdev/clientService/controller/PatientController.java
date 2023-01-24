@@ -7,6 +7,7 @@ import com.cleverdev.clientService.model.PatientModel;
 import com.cleverdev.clientService.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by Vladislav Domaniewski
  */
 
-@Log
+@Log4j2
 @RestController
 @RequestMapping("/api/patient")
 @RequiredArgsConstructor
