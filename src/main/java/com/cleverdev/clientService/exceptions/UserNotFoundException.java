@@ -1,15 +1,26 @@
 package com.cleverdev.clientService.exceptions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Created by Vladislav Domaniewski
  */
 
-public class UserNotFoundException extends Exception{
+@Getter
+@Setter
+public class UserNotFoundException extends RuntimeException{
+    public UserNotFoundException() {
+    }
+
+    private int statusCode;
+    private String message;
     public UserNotFoundException(String message) {
         super(message);
     }
 
-    public UserNotFoundException() {
-        super();
+    public UserNotFoundException(int statusCode, String message) {
+        this.statusCode = statusCode;
+        this.message = message;
     }
 }

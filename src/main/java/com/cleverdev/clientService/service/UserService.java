@@ -36,7 +36,10 @@ public class UserService {
         }
     }
 
-    public User getUser(Long id) {
+    public User getUser(Long id) throws UserNotFoundException {
+        if (userRepo.findById(id).isEmpty()) {
+            throw new UserNotFoundException();
+        }
         return userRepo.getById(id);
     }
 
@@ -49,13 +52,13 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public boolean deleteUser(String login) {
+    public boolean deleteUser(String login) throws UserNotFoundException {
         User user = userRepo.findByLogin(login);
         if (userRepo.findByLogin(login) != null) {
             userRepo.deleteById(user.getId());
             return true;
         } else {
-            return false;
+            throw new UserNotFoundException();
         }
     }
 
