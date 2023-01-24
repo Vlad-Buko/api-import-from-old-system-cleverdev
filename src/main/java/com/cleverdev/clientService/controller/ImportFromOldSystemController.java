@@ -2,6 +2,7 @@ package com.cleverdev.clientService.controller;
 
 import com.cleverdev.clientService.entity.Note;
 import com.cleverdev.clientService.service.ImportFromOldSystemService;
+import com.cleverdev.clientService.service.getDataFromOldSystemMethods.DataFromOldSystem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.json.simple.JSONArray;
@@ -30,6 +31,7 @@ public class ImportFromOldSystemController {
     @Value("${app.urlClients}")
     private String urlForClients;
     private final ImportFromOldSystemService importService;
+    private final DataFromOldSystem dataFromOldSystem;
 
 
     // Запуск приложения каждые 2 часа в 15 минут первого часа
@@ -40,6 +42,7 @@ public class ImportFromOldSystemController {
         JSONArray arrayPatientsFromOldSystem = importService.getJsonObjFromOldSystem(urlForClients);
         String info = importService.importFromOldSystem(arrayPatientsFromOldSystem);
         log.info(info);
+        dataFromOldSystem.setCountNote(0);
         return ResponseEntity.ok().build();
     }
 

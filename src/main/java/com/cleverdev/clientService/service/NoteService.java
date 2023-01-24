@@ -5,6 +5,7 @@ import com.cleverdev.clientService.entity.Note;
 import com.cleverdev.clientService.entity.Patient;
 import com.cleverdev.clientService.entity.User;
 import com.cleverdev.clientService.exceptions.NoteNotFoundException;
+import com.cleverdev.clientService.exceptions.UserNotFoundException;
 import com.cleverdev.clientService.model.NoteModel;
 import com.cleverdev.clientService.repository.UserRepository;
 import com.cleverdev.clientService.service.converter.NoteConverter;
@@ -31,8 +32,11 @@ public class NoteService {
     private final NoteRepository noteRepo;
     private final NoteConverter noteConvert;
 
-    public Note createNewNote(NoteModel noteModel) {
+    public Note createNewNote(NoteModel noteModel) throws UserNotFoundException {
         User user = userRepo.findByLogin(noteModel.getUserLogin());
+        if (user == null) {
+            throw new UserNotFoundException("User not found in DB, please, try else one");
+        }
         Patient patient = patientRepo.findByOldClientGuid(noteModel.getPatientGuid());
         NoteDto noteDto = NoteDto.builder()
                         .createdDateTime(LocalDateTime.now())
@@ -40,6 +44,7 @@ public class NoteService {
                         .createdByUserId(user)
                         .lastModifiedByUserId(user)
                         .patient(patient).build();
+
         return noteRepo.save(noteConvert.fromNoteDtoToNote(noteDto));
     }
 
@@ -59,8 +64,9 @@ public class NoteService {
     public boolean deleteNoteFromSystem(Long id) throws NoteNotFoundException {
         if (noteRepo.findById(id).isEmpty()) {
             throw new NoteNotFoundException();
+        } else {
+            noteRepo.deleteById(id);
         }
-        noteRepo.deleteById(id);
         return true;
     }
 
