@@ -4,6 +4,7 @@ import com.cleverdev.clientService.dto.NoteDto;
 import com.cleverdev.clientService.entity.Note;
 import com.cleverdev.clientService.entity.Patient;
 import com.cleverdev.clientService.entity.User;
+import com.cleverdev.clientService.exceptions.NoteNotFoundException;
 import com.cleverdev.clientService.exceptions.UserNotFoundException;
 import com.cleverdev.clientService.model.NoteModel;
 import com.cleverdev.clientService.repository.NoteRepository;
@@ -13,6 +14,7 @@ import com.cleverdev.clientService.service.NoteService;
 import com.cleverdev.clientService.service.converter.NoteConverter;
 import com.cleverdev.clientService.service.enums.PatientStatusEnum;
 import org.aspectj.weaver.ast.Not;
+import org.checkerframework.checker.nullness.Opt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -28,6 +30,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Vladislav Domaniewski
@@ -85,6 +88,13 @@ public class NoteServiceTest {
 
     }
 
+    @Test(expected = NoteNotFoundException.class)
+    public void checkDeleteNote() throws NoteNotFoundException {
+        List<Note> lists = initNoteFromDbEntity();
+        Mockito.when(noteRepository.findById(1l)).thenReturn(null);
+        noteService.deleteNoteFromSystem(1l);
+    }
+
     // Наши данные хранятся в БД
     // Здесь якобы БД
 
@@ -114,7 +124,6 @@ public class NoteServiceTest {
                 .id(1l)
                 .createdDateTime(LocalDateTime.now())
                 .lastModifiedDateTime(LocalDateTime.now())
-                .createdByUserId(userList.get(0))
                 .lastModifiedByUserId(userList.get(0))
                 .comment("Health coach daily reminder sent to patient.")
                 .patient(patientList.get(0))

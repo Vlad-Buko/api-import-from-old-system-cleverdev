@@ -39,6 +39,7 @@ public class NoteService {
         }
         Patient patient = patientRepo.findByOldClientGuid(noteModel.getPatientGuid());
         NoteDto noteDto = NoteDto.builder()
+                         .comment(noteModel.getNote())
                         .createdDateTime(LocalDateTime.now())
                         .lastModifiedDateTime(LocalDateTime.now())
                         .createdByUserId(user)
