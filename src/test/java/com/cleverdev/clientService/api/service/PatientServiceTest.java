@@ -102,12 +102,12 @@ public class PatientServiceTest {
         Assertions.assertTrue(expected);
     }
 
-    @Test
+    @Test(expected = PatientNotFoundException.class)
     public void checkDeletePatientFromDb () throws PatientNotFoundException {
         // Если пациента не находим, выбрасывает исключение
         List<Patient> patientList = initPatientList();
         Mockito.when(patientRepository.getById(1l)).thenReturn(patientList.get(0));
-        patientService.deletePatientFromDb(1l);
+        patientService.deletePatientFromDb(2l);
     }
 
     private List<Patient> initPatientList() {

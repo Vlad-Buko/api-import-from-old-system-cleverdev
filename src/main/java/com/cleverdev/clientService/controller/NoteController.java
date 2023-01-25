@@ -51,7 +51,7 @@ public class NoteController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteNoteFromDB(@RequestParam Long idNote)  {
         try {
-            noteService.deleteNoteFromSystem(2l);
+            noteService.deleteNoteFromSystem(idNote);
             log.info("Note be deleted");
         } catch (NoteNotFoundException e) {
             log.error("Note was be not found! Please, write another id!");
