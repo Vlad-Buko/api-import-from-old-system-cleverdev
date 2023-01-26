@@ -5,12 +5,11 @@ import com.cleverdev.clientService.exceptions.UserNotFoundException;
 import com.cleverdev.clientService.model.NoteModel;
 import com.cleverdev.clientService.service.NoteService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Vladislav Domaniewski
@@ -36,13 +35,17 @@ public class NoteController {
     }
 
     @GetMapping("/get-note")
-    public HashMap<Object, Object> showNoteForUser (@RequestParam String userLogin) {
+    public Map<Long, String> showNoteForUser (@RequestParam String userLogin) {
         return noteService.showNotes(userLogin);
     }
 
     @PatchMapping("/change-note")
-    public ResponseEntity<Void> changeNote(@RequestBody NoteModel noteModel,
+    public ResponseEntity<Void> changeNote(@RequestBody String note,
+                                           @RequestBody String userLogin,
                                            @RequestParam Long id) {
+        NoteModel noteModel = new NoteModel();
+        noteModel.setNote(note);
+        noteModel.setUserLogin(userLogin);
         noteService.updateOneNote(noteModel, id);
         log.info("Note was be change");
         return ResponseEntity.ok().build();
