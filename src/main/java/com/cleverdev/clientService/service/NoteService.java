@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,11 +34,12 @@ public class NoteService {
     private final NoteRepository noteRepo;
     private final NoteConverter noteConvert;
 
-    public Note createNewNote(NoteModel noteModel) throws UserNotFoundException {
+    public Boolean createNewNote(NoteModel noteModel) {
         User user = userRepo.findByLogin(noteModel.getUserLogin());
         if (user == null) {
             throw new UserNotFoundException("User not found in DB, please, try else one");
         }
+
         Patient patient = patientRepo.findByOldClientGuid(noteModel.getPatientGuid());
         NoteDto noteDto = NoteDto.builder()
                          .comment(noteModel.getNote())
@@ -45,21 +48,31 @@ public class NoteService {
                         .createdByUserId(user)
                         .lastModifiedByUserId(user)
                         .patient(patient).build();
-
-        return noteRepo.save(noteConvert.fromNoteDtoToNote(noteDto));
+        noteRepo.save(noteConvert.fromNoteDtoToNote(noteDto));
+        return true;
     }
 
     public Note updateOneNote(NoteModel noteModel, Long idNote) {
+        User user = userRepo.findByLogin(noteModel.getUserLogin());
         Note note = noteRepo.getById(idNote);
+        if (user == null) {
+            throw new UserNotFoundException("User not found in DB, please, try else one");
+        }
         note.setComment(noteModel.getNote());
-//        note.setLastModifiedByUserId();
-//        noteRepo.save(note);
-        return null;
+        note.setLastModifiedByUserId(user);
+        note.setLastModifiedDateTime(LocalDateTime.now());
+        noteRepo.save(note);
+        return note;
     }
 
-    public HashMap<Object, Object> showNotes(String userLogin) {
+    public Map<Long, String> showNotes(String userLogin) {
         User user = userRepo.findByLogin(userLogin);
-        return noteRepo.findByCreatedByUserId(user.getId());
+        List<Note> listNote = user.getListNoteForUserCreated();
+        Map<Long, String> notes = new HashMap<>();
+        for (Note note : listNote) {
+            notes.put(note.getId(), note.getComment());
+        }
+        return notes;
     }
 
     public boolean deleteNoteFromSystem(Long id) throws NoteNotFoundException {

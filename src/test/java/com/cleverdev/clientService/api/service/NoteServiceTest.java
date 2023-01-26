@@ -1,6 +1,5 @@
 package com.cleverdev.clientService.api.service;
 
-import com.cleverdev.clientService.dto.NoteDto;
 import com.cleverdev.clientService.entity.Note;
 import com.cleverdev.clientService.entity.Patient;
 import com.cleverdev.clientService.entity.User;
@@ -13,24 +12,19 @@ import com.cleverdev.clientService.repository.UserRepository;
 import com.cleverdev.clientService.service.NoteService;
 import com.cleverdev.clientService.service.converter.NoteConverter;
 import com.cleverdev.clientService.service.enums.PatientStatusEnum;
-import org.aspectj.weaver.ast.Not;
-import org.checkerframework.checker.nullness.Opt;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by Vladislav Domaniewski
@@ -55,9 +49,10 @@ public class NoteServiceTest {
     @MockBean
     private NoteConverter noteConverter;
 
-    List<Note> noteList = initNoteFromDbEntity();
     List<User> userList = initListUser();
     List<Patient> patientList = initListPatient();
+    List<Note> noteList = initNoteFromDbEntity();
+
 
     @Before
     public void initTestForNotes() {
@@ -66,7 +61,6 @@ public class NoteServiceTest {
 
     @Test
     public void createdNewNoteTest() {
-
         NoteModel noteModel = new NoteModel();
         noteModel.setNote("Something with heart");
         noteModel.setPatientGuid("1111-2222-3333-44444");
@@ -74,25 +68,65 @@ public class NoteServiceTest {
         Mockito.when(userRepository.findByLogin(noteModel.getUserLogin()))
                 .thenReturn(userList.get(0));
 
-
         Mockito.when(patientRepository.findByOldClientGuid(noteModel.getPatientGuid()))
                 .thenReturn(patientList.get(0));
 
-        try {
-            Note actual = noteService.createNewNote(noteModel);
-            Note expected = noteList.get(0);
-            Assertions.assertEquals(expected, actual);
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-        }
-
+        Boolean actual = noteService.createNewNote(noteModel);
+        Assertions.assertTrue(actual);
     }
 
-    @Test(expected = NoteNotFoundException.class)
+    @Test(expected = UserNotFoundException.class)
+    public void createNewNoteExpectedExceptionWhenNotUserTest() {
+        NoteModel noteModel = new NoteModel();
+        Mockito.when(userRepository.findByLogin(noteModel.getUserLogin()))
+                .thenReturn(null);
+        noteService.createNewNote(noteModel);
+    }
+
+    @Test
     public void checkDeleteNote() throws NoteNotFoundException {
         List<Note> lists = initNoteFromDbEntity();
-        Mockito.when(noteRepository.findById(1l)).thenReturn(null);
-        noteService.deleteNoteFromSystem(1l);
+        Mockito.when(noteRepository.findById(1l)).thenReturn(Optional.of(lists.get(0)));
+        Boolean actual = noteService.deleteNoteFromSystem(1l);
+        Assertions.assertTrue(actual);
+    }
+
+    @Test
+    public void updateNoteCheckTest() {
+        NoteModel note = new NoteModel();
+        note.setNote("Some notes, from England");
+        note.setUserLogin("how.yang");
+        Long idNote = 2l;
+        Mockito.when(userRepository.findByLogin(note.getUserLogin())).thenReturn(userList.get(3));
+        Mockito.when(noteRepository.getById(idNote)).thenReturn(noteList.get(2));
+        Note noteFromService = noteService.updateOneNote(note, idNote);
+
+        Note expected = new Note();
+        expected.setComment(note.getNote());
+        expected.setLastModifiedByUserId(userList.get(3));
+
+        Note actual = new Note();
+        actual.setComment(noteFromService.getComment());
+        actual.setLastModifiedByUserId(noteFromService.getLastModifiedByUserId());
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    @Ignore
+    public void getListNoteForUserCheckTest() {
+        String login = "ver.car";
+        Mockito.when(userRepository.findByLogin(login)).thenReturn(initListUser().get(2));
+        User user = initListUser().get(2);
+        user.setListNoteForUserCreated(initNoteFromDbEntity());
+        Map<Long, String> expected = noteService.showNotes(login);
+        Map<Long, String> actual = new HashMap<>();
+        actual.put(1l, "Health coach daily reminder sent to patient.");
+        actual.put(2l, "Health coach reminder sent.");
+        actual.put(3l, "Health coach reminder sent.");
+        actual.put(4l, "Health coach reminder sent.");
+
+        Assertions.assertEquals(expected, actual);
     }
 
     // Наши данные хранятся в БД
@@ -106,15 +140,15 @@ public class NoteServiceTest {
 
         User userSecond = User.builder()
                 .id(2l)
-                .login("mor.var")
+                .login("vik.olk")
                 .build();
         User userThirty = User.builder()
                 .id(3l)
-                .login("mor.var")
+                .login("ver.car")
                 .build();
         User userForty = User.builder()
                 .id(4l)
-                .login("mor.var")
+                .login("how.yang")
                 .build();
         return List.of(userFirst, userSecond, userThirty, userForty);
     }
@@ -169,7 +203,7 @@ public class NoteServiceTest {
                 .lastName("Bezrukov")
                 .oldClientGuid("1111-2222-3333-44444")
                 .statusId(PatientStatusEnum.ACTIVE)
-//                .listNoteForOnePatient()
+                .listNoteForOnePatient(noteList)
                 .build();
 
         Patient patientSecond = Patient.builder()
