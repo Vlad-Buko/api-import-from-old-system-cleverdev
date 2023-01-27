@@ -5,16 +5,12 @@
 Nsrc/main/java/com/cleverdev/clientService/service/enums/PatientStatusEnum.java,4/0/4041f8d7d6faeec0811b896756fdbda9c710c780
 {
 Ksrc/main/java/com/cleverdev/clientService/repository/PatientRepository.java,7/2/7291fbfbec0cb292002a024bb6bdac38c53d1719
-9
-	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 ƒ
 Ssrc/main/java/com/cleverdev/clientService/exceptions/UserAlreadyExistException.java,c/2/c21b27b533e25ec473c503866005c4654facb076
 
 Osrc/main/java/com/cleverdev/clientService/exceptions/NoteNotFoundException.java,5/0/506a084add6f0d038ef101fe4884290123a3ca33
 ‚
 Rsrc/main/java/com/cleverdev/clientService/exceptions/PatientNotFoundException.java,f/b/fbeb5d6b203d511de56ce63019f534c683d3a514
-q
-Asrc/main/java/com/cleverdev/clientService/CleverDevNewSystem.java,9/3/93246eeb2257a26daf51c16d0ca47111b4a510a5
 j
 :src/main/java/com/cleverdev/clientService/dto/UserDto.java,9/d/9d40ee7940757f03f51fb7ffff3c984399f0d43f
 
@@ -23,8 +19,6 @@ j
 :src/main/java/com/cleverdev/clientService/dto/NoteDto.java,1/7/1780ae80b33dd70a0112c9f86059a2c8e9ecb15d
 
 Osrc/main/java/com/cleverdev/clientService/service/converter/UsersConverter.java,a/7/a742de1bcf8c75765aeeffba67f26fdc7cc08f63
-z
-Jsrc/test/java/com/cleverdev/clientService/api/service/UserServiceTest.java,a/6/a60f9d025ecafc6025d88c7d2341343053933392
 ‡
 Wsrc/main/java/com/cleverdev/clientService/controller/ImportFromOldSystemController.java,0/f/0f4f761e5b709a046ce538365e1ea5718cd8d037
 
