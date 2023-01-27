@@ -10,10 +10,7 @@ import com.cleverdev.clientService.repository.NoteRepository;
 import com.cleverdev.clientService.repository.PatientRepository;
 import com.cleverdev.clientService.repository.UserRepository;
 import com.cleverdev.clientService.service.NoteService;
-import com.cleverdev.clientService.service.converter.NoteConverter;
 import com.cleverdev.clientService.service.enums.PatientStatusEnum;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
@@ -46,18 +43,9 @@ public class NoteServiceTest {
     @MockBean
     private PatientRepository patientRepository;
 
-    @MockBean
-    private NoteConverter noteConverter;
-
     List<User> userList = initListUser();
     List<Patient> patientList = initListPatient();
     List<Note> noteList = initNoteFromDbEntity();
-
-
-    @Before
-    public void initTestForNotes() {
-
-    }
 
     @Test
     public void createdNewNoteTest() {
@@ -113,11 +101,11 @@ public class NoteServiceTest {
     }
 
     @Test
-    @Ignore
     public void getListNoteForUserCheckTest() {
         String login = "ver.car";
-        Mockito.when(userRepository.findByLogin(login)).thenReturn(initListUser().get(2));
         User user = initListUser().get(2);
+        Mockito.when(userRepository.findByLogin(login)).thenReturn(user);
+
         user.setListNoteForUserCreated(initNoteFromDbEntity());
         Map<Long, String> expected = noteService.showNotes(login);
         Map<Long, String> actual = new HashMap<>();
