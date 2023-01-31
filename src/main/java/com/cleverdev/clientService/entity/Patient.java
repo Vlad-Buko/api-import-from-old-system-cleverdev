@@ -34,6 +34,9 @@ public class Patient {
     @Column(name = "old_client_guid")
     private String oldClientGuid;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
+    private List<Guid> guidList;
+
     @Column(name = "status_id")
     @Enumerated(EnumType.ORDINAL)
     private PatientStatusEnum statusId;

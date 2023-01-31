@@ -33,7 +33,6 @@ public class ImportFromOldSystemController {
     private final ImportFromOldSystemService importService;
     private final DataFromOldSystem dataFromOldSystem;
 
-
     // Запуск приложения каждые 2 часа в 15 минут первого часа
     @Scheduled(cron = "* 15 0/2 * * *")
     @PostMapping("/import-from-old-system")
@@ -45,13 +44,4 @@ public class ImportFromOldSystemController {
         dataFromOldSystem.setCountNote(0);
         return ResponseEntity.ok().build();
     }
-
-//    @PostMapping("/test")
-//    public ResponseEntity<Void> saveCollection() {
-//        List<Note> setNotes = noteRepository.findAll();
-//        noteRepository.deleteAll();
-//        System.out.println(noteRepository.findAll());
-//        noteRepository.saveAll(setNotes);
-//        return ResponseEntity.ok().build();
-//    }
 }

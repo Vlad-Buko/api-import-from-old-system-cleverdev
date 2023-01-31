@@ -1,6 +1,6 @@
 package com.cleverdev.clientService.service;
 
-import com.cleverdev.clientService.repository.NoteRepository;
+import com.cleverdev.clientService.entity.Patient;
 import com.cleverdev.clientService.service.converter.PatientConvert;
 import com.cleverdev.clientService.dto.PatientDto;
 import com.cleverdev.clientService.service.enums.PatientStatusEnum;
@@ -36,7 +36,6 @@ public class ImportFromOldSystemService  {
     private String dateFrom;
     @Value("${app.importData.dateTo}")
     private String dateTo;
-    private final NoteRepository noteRepository;
 
     public JSONArray getJsonObjFromOldSystem(String urlClient) {
         HttpHeaders headers = new HttpHeaders();
@@ -50,7 +49,7 @@ public class ImportFromOldSystemService  {
     public String importFromOldSystem(JSONArray getObjFromOldSystem) {
         for (Object ob : getObjFromOldSystem) {
             PatientDto patientDto;
-            LinkedHashMap<Object, Object> jsonPatientKey = (LinkedHashMap) ob;
+            LinkedHashMap jsonPatientKey = (LinkedHashMap) ob;
 
             patientDto = PatientDto.builder()
                     .agency((String) jsonPatientKey.get("agency"))
@@ -60,34 +59,38 @@ public class ImportFromOldSystemService  {
                     .lastName((String) jsonPatientKey.get("lastName"))
                     .status((PatientStatusEnum.valueOf(jsonPatientKey.get("status").toString())))
                     .build();
-            if (patientRepo.findByOldClientGuid(patientDto.getGuid()) == null) {
-                patientRepo.save(patientConvert.fromPatientDtoToPatient(patientDto));
-            }
-            if (PatientStatusEnum.ACTIVE == (PatientStatusEnum.valueOf(jsonPatientKey.get("status").toString()))) {
 
-                try {
-                    HttpHeaders headers = new HttpHeaders();
-                    headers.setContentType(MediaType.APPLICATION_JSON);
-                    JSONObject request = new JSONObject();
-                    request.put("agency", jsonPatientKey.get("agency"));
-                    request.put("dateFrom", dateFrom);
-                    request.put("dateTo", dateTo);
-                    request.put("clientGuid", jsonPatientKey.get("guid"));
-                    RestTemplate restTemplate = new RestTemplate();
-                    HttpEntity<JSONObject> entity = new HttpEntity<>(request, headers);
-                    ResponseEntity<JSONArray> response = restTemplate.exchange(urlForNotes, HttpMethod.POST, entity, typeRef);
-                    JSONArray responseDetailsNotes = response.getBody();
+            // тут смотреть нужно что бы два guid у одного а то и больше было
 
-                    if (responseDetailsNotes.size() == 0) {
-                        continue;
-                    } else {
-                        dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey);
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
+            patientRepo.save(patientConvert.fromPatientDtoToPatient(patientDto));
+
+//            if (PatientStatusEnum.ACTIVE == (PatientStatusEnum.valueOf(jsonPatientKey.get("status").toString()))) {
+//
+//                try {
+//                    HttpHeaders headers = new HttpHeaders();
+//                    headers.setContentType(MediaType.APPLICATION_JSON);
+//                    JSONObject request = new JSONObject();
+//                    request.put("agency", jsonPatientKey.get("agency"));
+//                    request.put("dateFrom", dateFrom);
+//                    request.put("dateTo", dateTo);
+//                    request.put("clientGuid", jsonPatientKey.get("guid"));
+//                    RestTemplate restTemplate = new RestTemplate();
+//                    HttpEntity<JSONObject> entity = new HttpEntity<>(request, headers);
+//                    ResponseEntity<JSONArray> response = restTemplate.exchange(urlForNotes, HttpMethod.POST, entity, typeRef);
+//                    JSONArray responseDetailsNotes = response.getBody();
+//
+//                    if (responseDetailsNotes.size() == 0) {
+//                        continue;
+//                    } else {
+//                        dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey);
+//                    }
+//                } catch (Exception e) {
+//                    System.out.println(e);
+//                }
+//            }
+//        }
         }
         return "Добавлено заметок: " + dataFromOldSystem.getCountNote();
     }
+
 }
