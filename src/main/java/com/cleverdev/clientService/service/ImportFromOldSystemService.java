@@ -25,6 +25,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class ImportFromOldSystemService  {
+    long timeBegin = System.currentTimeMillis();
     ParameterizedTypeReference<JSONArray> typeRef = new ParameterizedTypeReference<>() {
     };
     private final PatientRepository patientRepo;
@@ -47,19 +48,20 @@ public class ImportFromOldSystemService  {
         return response.getBody();
     }
 
-    public String importFromOldSystem(JSONArray getObjFromOldSystem) {
+    public String importFromOldSystem(JSONArray getObjFromOldSystem) throws Exception {
         for (Object ob : getObjFromOldSystem) {
             PatientDto patientDto;
-            LinkedHashMap<Object, Object> jsonPatientKey = (LinkedHashMap) ob;
+            LinkedHashMap jsonPatientKey = (LinkedHashMap) ob;
 
-            patientDto = PatientDto.builder()
-                    .agency((String) jsonPatientKey.get("agency"))
-                    .createdDateTime((LocalDateTime) jsonPatientKey.get("createDateTime"))
-                    .firstName((String) jsonPatientKey.get("firstName"))
-                    .guid((String) jsonPatientKey.get("guid"))
-                    .lastName((String) jsonPatientKey.get("lastName"))
-                    .status((PatientStatusEnum.valueOf(jsonPatientKey.get("status").toString())))
-                    .build();
+                patientDto = PatientDto.builder()
+                        .agency((String) jsonPatientKey.get("agency"))
+                        .createdDateTime((LocalDateTime) jsonPatientKey.get("createDateTime"))
+                        .firstName((String) jsonPatientKey.get("firstName"))
+                        .guid((String) jsonPatientKey.get("guid"))
+                        .lastName((String) jsonPatientKey.get("lastName"))
+                        .status((PatientStatusEnum.valueOf(jsonPatientKey.get("status").toString())))
+                        .build();
+
             if (patientRepo.findByOldClientGuid(patientDto.getGuid()) == null) {
                 patientRepo.save(patientConvert.fromPatientDtoToPatient(patientDto));
             }
@@ -84,10 +86,13 @@ public class ImportFromOldSystemService  {
                         dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey);
                     }
                 } catch (Exception e) {
-                    System.out.println(e);
+                    return "Cбой при парсинге клиента";
                 }
             }
         }
-        return "Добавлено заметок: " + dataFromOldSystem.getCountNote();
+        long timeEnd = System.currentTimeMillis();
+        long actualTime = timeEnd - timeBegin;
+        return "Добавлено заметок: " + dataFromOldSystem.getCountNote() +
+                "\n прошло времени: " + actualTime;
     }
 }
