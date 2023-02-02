@@ -15,11 +15,13 @@ j
 :src/main/java/com/cleverdev/clientService/dto/UserDto.java,9/d/9d40ee7940757f03f51fb7ffff3c984399f0d43f
 
 Osrc/main/java/com/cleverdev/clientService/service/converter/PatientConvert.java,8/b/8bd153e14daccf776ffe60a794b62b619f548210
-j
-:src/main/java/com/cleverdev/clientService/dto/NoteDto.java,1/7/1780ae80b33dd70a0112c9f86059a2c8e9ecb15d
 
 Osrc/main/java/com/cleverdev/clientService/service/converter/UsersConverter.java,a/7/a742de1bcf8c75765aeeffba67f26fdc7cc08f63
 
 Osrc/main/java/com/cleverdev/clientService/exceptions/UserNotFoundException.java,5/6/56ec1a3056735e3f24d60ad38ba755617470abc5
 n
 >src/main/java/com/cleverdev/clientService/model/NoteModel.java,e/7/e75ca6a8d96a59db08ab0109d9bb17acf0ac204e
+9
+	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+{
+Ksrc/main/java/com/cleverdev/clientService/controller/PatientController.java,6/d/6d06e8f8ccd885f1f7bacedfb052ffcab60002dc
