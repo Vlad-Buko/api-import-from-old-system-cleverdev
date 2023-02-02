@@ -1,8 +1,6 @@
 package com.cleverdev.clientService.service;
 
-import com.cleverdev.clientService.repository.NoteRepository;
-import com.cleverdev.clientService.service.converter.PatientConvert;
-import com.cleverdev.clientService.dto.PatientDto;
+import com.cleverdev.clientService.entity.Patient;
 import com.cleverdev.clientService.service.enums.PatientStatusEnum;
 import com.cleverdev.clientService.repository.PatientRepository;
 import com.cleverdev.clientService.service.getDataFromOldSystemMethods.DataFromOldSystem;
@@ -15,7 +13,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -29,7 +26,6 @@ public class ImportFromOldSystemService  {
     ParameterizedTypeReference<JSONArray> typeRef = new ParameterizedTypeReference<>() {
     };
     private final PatientRepository patientRepo;
-    private final PatientConvert patientConvert;
     private final DataFromOldSystem dataFromOldSystem;
     @Value("${app.urlNotes}")
     private String urlForNotes;
@@ -37,7 +33,6 @@ public class ImportFromOldSystemService  {
     private String dateFrom;
     @Value("${app.importData.dateTo}")
     private String dateTo;
-    private final NoteRepository noteRepository;
 
     public JSONArray getJsonObjFromOldSystem(String urlClient) {
         HttpHeaders headers = new HttpHeaders();
@@ -48,45 +43,39 @@ public class ImportFromOldSystemService  {
         return response.getBody();
     }
 
-    public String importFromOldSystem(JSONArray getObjFromOldSystem) throws Exception {
-        for (Object ob : getObjFromOldSystem) {
-            PatientDto patientDto;
-            LinkedHashMap jsonPatientKey = (LinkedHashMap) ob;
-
-                patientDto = PatientDto.builder()
-                        .agency((String) jsonPatientKey.get("agency"))
-                        .createdDateTime((LocalDateTime) jsonPatientKey.get("createDateTime"))
-                        .firstName((String) jsonPatientKey.get("firstName"))
-                        .guid((String) jsonPatientKey.get("guid"))
-                        .lastName((String) jsonPatientKey.get("lastName"))
-                        .status((PatientStatusEnum.valueOf(jsonPatientKey.get("status").toString())))
-                        .build();
-
-            if (patientRepo.findByOldClientGuid(patientDto.getGuid()) == null) {
-                patientRepo.save(patientConvert.fromPatientDtoToPatient(patientDto));
-            }
-            if (PatientStatusEnum.ACTIVE == (PatientStatusEnum.valueOf(jsonPatientKey.get("status").toString()))) {
-
-                try {
-                    HttpHeaders headers = new HttpHeaders();
-                    headers.setContentType(MediaType.APPLICATION_JSON);
-                    JSONObject request = new JSONObject();
-                    request.put("agency", jsonPatientKey.get("agency"));
-                    request.put("dateFrom", dateFrom);
-                    request.put("dateTo", dateTo);
-                    request.put("clientGuid", jsonPatientKey.get("guid"));
-                    RestTemplate restTemplate = new RestTemplate();
-                    HttpEntity<JSONObject> entity = new HttpEntity<>(request, headers);
-                    ResponseEntity<JSONArray> response = restTemplate.exchange(urlForNotes, HttpMethod.POST, entity, typeRef);
-                    JSONArray responseDetailsNotes = response.getBody();
-
+    public String importFromOldSystem(JSONArray getObjFromOldSystem) {
+        /*
+            Импорт заметок из старой системы происходит если у пациента Status ACTIVE
+         */
+        List<Patient> patientList = patientRepo.findAll();
+        for (Patient patient : patientList) {
+            if (PatientStatusEnum.ACTIVE == (patient.getStatusId())) {
+                LinkedHashMap jsonPatientKey;
+                for (Object ob : getObjFromOldSystem) {
+                    jsonPatientKey = (LinkedHashMap) ob;
+                    if (patient.getOldClientGuid().equals(jsonPatientKey.get("guid").toString())) {
+                        try {
+                            HttpHeaders headers = new HttpHeaders();
+                            headers.setContentType(MediaType.APPLICATION_JSON);
+                            JSONObject request = new JSONObject();
+                            request.put("agency", jsonPatientKey.get("agency"));
+                            request.put("dateFrom", dateFrom);     // * Параметры даты задаются из application.properties
+                            request.put("dateTo", dateTo);
+                            request.put("clientGuid", jsonPatientKey.get("guid"));
+                            RestTemplate restTemplate = new RestTemplate();
+                            HttpEntity<JSONObject> entity = new HttpEntity<>(request, headers);
+                            ResponseEntity<JSONArray> response = restTemplate.exchange(urlForNotes, HttpMethod.POST, entity, typeRef);
+                            JSONArray responseDetailsNotes = response.getBody();
                     if (responseDetailsNotes.size() == 0) {
                         continue;
                     } else {
-                        dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey);
+                            dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey);
                     }
-                } catch (Exception e) {
-                    return "Cбой при парсинге клиента";
+                        } catch (Exception e) {
+                            return "Cбой при парсинге клиента";
+                        }
+                        break;
+                    }
                 }
             }
         }
