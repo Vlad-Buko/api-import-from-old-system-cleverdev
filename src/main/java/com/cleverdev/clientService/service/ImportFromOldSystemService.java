@@ -19,6 +19,7 @@ import java.util.*;
  * Created by Vladislav Domaniewski
  */
 
+
 @Service
 @RequiredArgsConstructor
 public class ImportFromOldSystemService  {
@@ -50,33 +51,34 @@ public class ImportFromOldSystemService  {
         List<Patient> patientList = patientRepo.findAll();
         for (Patient patient : patientList) {
             if (PatientStatusEnum.ACTIVE == (patient.getStatusId())) {
+                String guidKit = patient.getOldClientGuid();
+                String[] listGuid = guidKit.split(",\n");
+                for (String guid : listGuid) {
                 LinkedHashMap jsonPatientKey;
                 for (Object ob : getObjFromOldSystem) {
                     jsonPatientKey = (LinkedHashMap) ob;
-                    if (patient.getOldClientGuid().equals(jsonPatientKey.get("guid").toString())) {
-                        try {
-                            HttpHeaders headers = new HttpHeaders();
-                            headers.setContentType(MediaType.APPLICATION_JSON);
-                            JSONObject request = new JSONObject();
-                            request.put("agency", jsonPatientKey.get("agency"));
-                            request.put("dateFrom", dateFrom);     // * Параметры даты задаются из application.properties
-                            request.put("dateTo", dateTo);
-                            request.put("clientGuid", jsonPatientKey.get("guid"));
-                            RestTemplate restTemplate = new RestTemplate();
-                            HttpEntity<JSONObject> entity = new HttpEntity<>(request, headers);
-                            ResponseEntity<JSONArray> response = restTemplate.exchange(urlForNotes, HttpMethod.POST, entity, typeRef);
-                            JSONArray responseDetailsNotes = response.getBody();
-                    if (responseDetailsNotes.size() == 0) {
-                        continue;
-                    } else {
+                    if (guid.equals(jsonPatientKey.get("guid").toString())) {
+                        HttpHeaders headers = new HttpHeaders();
+                        headers.setContentType(MediaType.APPLICATION_JSON);
+                        JSONObject request = new JSONObject();
+                        request.put("agency", jsonPatientKey.get("agency"));
+                        request.put("dateFrom", dateFrom);     // * Параметры даты задаются из application.properties
+                        request.put("dateTo", dateTo);
+                        request.put("clientGuid", jsonPatientKey.get("guid"));
+                        RestTemplate restTemplate = new RestTemplate();
+                        HttpEntity<JSONObject> entity = new HttpEntity<>(request, headers);
+                        ResponseEntity<JSONArray> response = restTemplate.exchange(urlForNotes, HttpMethod.POST, entity, typeRef);
+                        JSONArray responseDetailsNotes = response.getBody();
+
+                        if (responseDetailsNotes.size() == 0) {
+                            continue;
+                        } else {
                             dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey);
-                    }
-                        } catch (Exception e) {
-                            return "Cбой при парсинге клиента";
                         }
                         break;
                     }
                 }
+            }
             }
         }
         long timeEnd = System.currentTimeMillis();

@@ -3,7 +3,6 @@ package com.cleverdev.clientService.controller;
 import com.cleverdev.clientService.service.ImportFromOldSystemService;
 import com.cleverdev.clientService.service.getDataFromOldSystemMethods.DataFromOldSystem;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,11 +11,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 
 /**
  * Created by Vladislav Domaniewski
@@ -41,8 +37,14 @@ public class ImportFromOldSystemController {
             JSONArray arrayPatientsFromOldSystem = importService.getJsonObjFromOldSystem(urlForClients);
             log.info(importService.importFromOldSystem(arrayPatientsFromOldSystem));
             dataFromOldSystem.setCountNote(0);
+        } catch (ResourceAccessException e) {     // логи сбоев, одни из возможных
+            log.error("Ошибка при подключении к старой системе :(");
+            log.error(e.getMessage());
+        } catch (HttpServerErrorException e) {
+            log.error("Ошибка при парсинге, какой-то ключ введен не верно :(");
+            log.error(e.getMessage());
         } catch (Exception e) {
-            log.info("Сбой при парсинге");
+            log.error(e.getMessage());
         }
         return ResponseEntity.ok().build();
     }

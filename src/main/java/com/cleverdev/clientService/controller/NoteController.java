@@ -42,7 +42,7 @@ public class NoteController {
     @PatchMapping("/change-note")
     public ResponseEntity<Void> changeNote(@RequestBody String note,
                                            @RequestBody String userLogin,
-                                           @RequestParam Long id) {
+                                           @RequestBody Long id) {
         NoteModel noteModel = new NoteModel();
         noteModel.setNote(note);
         noteModel.setUserLogin(userLogin);
