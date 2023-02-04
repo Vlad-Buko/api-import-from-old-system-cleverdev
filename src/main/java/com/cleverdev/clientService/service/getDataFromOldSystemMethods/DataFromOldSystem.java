@@ -1,15 +1,12 @@
 package com.cleverdev.clientService.service.getDataFromOldSystemMethods;
 
-import com.cleverdev.clientService.dto.NoteDto;
 import com.cleverdev.clientService.entity.Note;
 import com.cleverdev.clientService.entity.Patient;
 import com.cleverdev.clientService.entity.User;
 import com.cleverdev.clientService.repository.NoteRepository;
-import com.cleverdev.clientService.repository.PatientRepository;
 import com.cleverdev.clientService.repository.UserRepository;
 import com.cleverdev.clientService.service.NoteService;
 import com.cleverdev.clientService.service.UserService;
-import com.cleverdev.clientService.service.converter.NoteConverter;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.springframework.stereotype.Component;
@@ -24,18 +21,15 @@ import java.util.*;
 @RequiredArgsConstructor
 public class DataFromOldSystem {
 
-    private final PatientRepository patientRepo;
     private final UserRepository userRepo;
     private final UserService userService;
-    private final NoteConverter noteConverter;
     private final NoteRepository noteRepository;
     private final NoteService noteService;
-    private long countNote = 0;
+    private long countNote;
 
-    public Long saveNoteInDB(JSONArray responseDetailsNotes, LinkedHashMap<Object, Object> jsonPatientKey) {
+    public Long saveNoteInDB(JSONArray responseDetailsNotes, Patient patient) {
 
         for (Object it : responseDetailsNotes) {
-            Patient findIdPatientForWriteForNoteEntity = patientRepo.findByOldClientGuid((String) jsonPatientKey.get("guid"));
 
             LinkedHashMap<Object, Object> jsonNoteKey = (LinkedHashMap) it;
 
@@ -48,11 +42,11 @@ public class DataFromOldSystem {
 
             // Логика проверки на наличие в БД заметки
             // ---
-            NoteDto noteDto = noteService.createdNoteFromOldSystem(findIdPatientForWriteForNoteEntity,
+            Note note = noteService.createdNoteFromOldSystem(patient,
                     findIdUserForWriteUserEntity, jsonNoteKey);
-            Optional<Note> findData = noteRepository.findByCreatedDateTime(noteDto.getCreatedDateTime());
+            Optional<Note> findData = noteRepository.findByCreatedDateTime(note.getCreatedDateTime());
             if (findData.isEmpty()) {
-                noteRepository.save(noteConverter.fromNoteDtoToNote(noteDto));
+                noteRepository.save(note);
                 countNote++;
             }
         }

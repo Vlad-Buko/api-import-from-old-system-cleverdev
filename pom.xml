@@ -12,7 +12,7 @@
 
     <groupId>org.cleverdev.clientservice</groupId>
     <artifactId>api-for-cleverdev</artifactId>
-    <version>api-new-system-v2.1.4</version>
+    <version>api-new-system-v2.3.4</version>
     <name>cleverdevtest-client-service</name>
     <description>cleverdevtest-client-service</description>
 
@@ -74,6 +74,7 @@
             <artifactId>gson</artifactId>
             <version>2.9.0</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>

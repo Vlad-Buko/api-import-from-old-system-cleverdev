@@ -52,7 +52,7 @@ public class ImportFromOldSystemService  {
         for (Patient patient : patientList) {
             if (PatientStatusEnum.ACTIVE == (patient.getStatusId())) {
                 String guidKit = patient.getOldClientGuid();
-                String[] listGuid = guidKit.split(",\n");
+                String[] listGuid = guidKit.split(",");
                 for (String guid : listGuid) {
                 LinkedHashMap jsonPatientKey;
                 for (Object ob : getObjFromOldSystem) {
@@ -73,7 +73,7 @@ public class ImportFromOldSystemService  {
                         if (responseDetailsNotes.size() == 0) {
                             continue;
                         } else {
-                            dataFromOldSystem.saveNoteInDB(responseDetailsNotes, jsonPatientKey);
+                            dataFromOldSystem.saveNoteInDB(responseDetailsNotes, patient);
                         }
                         break;
                     }

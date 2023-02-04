@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Vladislav Domaniewski
@@ -84,13 +81,34 @@ public class NoteService {
         return true;
     }
 
-    public NoteDto createdNoteFromOldSystem(Patient findIdPatientForWriteForNoteEntity,
+    public Note createdNoteFromOldSystem(Patient findIdPatientForWriteForNoteEntity,
                                             User findIdUserForWriteUserEntity,
                                             Map jsonNoteKey) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault());
         NoteDto noteDto;
 
+        // Проверяем дату со старой системой
+
+        Optional<Note> note = noteRepo.findByCreatedDateTime(LocalDateTime.parse((String) jsonNoteKey.get("createdDateTime"), formatter));
+        LocalDateTime dateTimeFromOldSystem = LocalDateTime.parse(jsonNoteKey.get("modifiedDateTime").toString(), formatter);
+        String commentUpdate = (String) jsonNoteKey.get("comments");
+
+        if (note.isPresent()) {
+            if(note.get().getLastModifiedDateTime().equals(dateTimeFromOldSystem)) {
+                return note.get();
+            }
+            if(note.get().getLastModifiedDateTime().isBefore(dateTimeFromOldSystem)) {
+                note.get().setLastModifiedDateTime(dateTimeFromOldSystem);
+                note.get().setComment(commentUpdate);
+                noteRepo.save(note.get());
+            }
+            if(note.get().getLastModifiedDateTime().isAfter(dateTimeFromOldSystem)) {
+                noteRepo.save(note.get());
+            }
+        }
+
         noteDto = NoteDto.builder()
+                // дата создания заметки равняется дате создания в старой системе
                 .createdDateTime(LocalDateTime.parse((String) jsonNoteKey.get("createdDateTime"), formatter))
                 .lastModifiedDateTime(LocalDateTime.parse(jsonNoteKey.get("modifiedDateTime").toString(), formatter))
                 .createdByUserId(findIdUserForWriteUserEntity)
@@ -98,7 +116,6 @@ public class NoteService {
                 .comment((String) jsonNoteKey.get("comments"))
                 .patient(findIdPatientForWriteForNoteEntity)
                 .build();
-        return noteDto;
+        return noteConvert.fromNoteDtoToNote(noteDto);
     }
-
 }
