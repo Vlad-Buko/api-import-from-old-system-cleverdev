@@ -17,13 +17,5 @@ Osrc/main/java/com/cleverdev/clientService/service/converter/PatientConvert.java
 Osrc/main/java/com/cleverdev/clientService/service/converter/UsersConverter.java,a/7/a742de1bcf8c75765aeeffba67f26fdc7cc08f63
 
 Osrc/main/java/com/cleverdev/clientService/exceptions/UserNotFoundException.java,5/6/56ec1a3056735e3f24d60ad38ba755617470abc5
-n
->src/main/java/com/cleverdev/clientService/model/NoteModel.java,e/7/e75ca6a8d96a59db08ab0109d9bb17acf0ac204e
 9
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-z
-Jsrc/test/java/com/cleverdev/clientService/api/service/NoteServiceTest.java,d/7/d7a1babdca0a07af70787f87837ba0a455cb3d44
-}
-Msrc/test/java/com/cleverdev/clientService/api/service/PatientServiceTest.java,f/8/f81281516fabeffa3a322fa9d37b2edbbf18c12d
-z
-Jsrc/test/java/com/cleverdev/clientService/api/service/UserServiceTest.java,a/6/a60f9d025ecafc6025d88c7d2341343053933392

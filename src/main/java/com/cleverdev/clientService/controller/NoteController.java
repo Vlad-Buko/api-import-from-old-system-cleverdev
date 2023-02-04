@@ -39,13 +39,9 @@ public class NoteController {
         return noteService.showNotes(userLogin);
     }
 
-    @PatchMapping("/change-note")
-    public ResponseEntity<Void> changeNote(@RequestBody String note,
-                                           @RequestBody String userLogin,
-                                           @RequestBody Long id) {
-        NoteModel noteModel = new NoteModel();
-        noteModel.setNote(note);
-        noteModel.setUserLogin(userLogin);
+    @PatchMapping("/change")
+    public ResponseEntity<?> changeNote(@RequestBody NoteModel noteModel,
+                                        @RequestParam Long id) {
         noteService.updateOneNote(noteModel, id);
         log.info("Note was be change");
         return ResponseEntity.ok().build();
