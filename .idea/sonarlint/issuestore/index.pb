@@ -19,3 +19,7 @@ Osrc/main/java/com/cleverdev/clientService/service/converter/UsersConverter.java
 Osrc/main/java/com/cleverdev/clientService/exceptions/UserNotFoundException.java,5/6/56ec1a3056735e3f24d60ad38ba755617470abc5
 9
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+x
+Hsrc/main/java/com/cleverdev/clientService/repository/NoteRepository.java,e/6/e6ba19777090fd7ee3718a85669cc6cb6e8554df
+r
+Bsrc/main/java/com/cleverdev/clientService/service/NoteService.java,9/5/95b21596d16a8ea3821b2aea1cb7f526822412ce

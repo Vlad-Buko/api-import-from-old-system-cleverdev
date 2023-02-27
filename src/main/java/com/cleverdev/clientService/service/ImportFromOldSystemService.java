@@ -44,18 +44,16 @@ public class ImportFromOldSystemService  {
         return response.getBody();
     }
 
-    public String importFromOldSystem(JSONArray getObjFromOldSystem) {
-        /*
-            Импорт заметок из старой системы происходит если у пациента Status ACTIVE
-         */
-        List<Patient> patientList = patientRepo.findAll();
-        for (Patient patient : patientList) {
-            if (PatientStatusEnum.ACTIVE == (patient.getStatusId())) {
-                String guidKit = patient.getOldClientGuid();
-                String[] listGuid = guidKit.split(",");
-                for (String guid : listGuid) {
+    public List<Patient> getPatientFromRepository() {
+        return patientRepo.findAll();
+    }
+
+    public void getPatientWithStatusActive(Patient patient, JSONArray objectFromOldSystem) {
+        if (PatientStatusEnum.ACTIVE == (patient.getStatusId())) {
+            String[] listGuid = patient.getOldClientGuid().split(",");
+            for (String guid : listGuid) {
                 LinkedHashMap jsonPatientKey;
-                for (Object ob : getObjFromOldSystem) {
+                for (Object ob : objectFromOldSystem) {
                     jsonPatientKey = (LinkedHashMap) ob;
                     if (guid.equals(jsonPatientKey.get("guid").toString())) {
                         HttpHeaders headers = new HttpHeaders();
@@ -79,11 +77,23 @@ public class ImportFromOldSystemService  {
                     }
                 }
             }
-            }
+        }
+    }
+
+
+    public String importFromOldSystem(JSONArray getObjFromOldSystem) {
+        /*
+            Импорт заметок из старой системы происходит если у пациента Status ACTIVE
+         */
+        for (Patient patient : getPatientFromRepository()) {
+            getPatientWithStatusActive(patient, getObjFromOldSystem);
         }
         long timeEnd = System.currentTimeMillis();
         long actualTime = timeEnd - timeBegin;
         return "Добавлено заметок: " + dataFromOldSystem.getCountNote() +
                 "\n прошло времени: " + actualTime;
     }
+
+
+
 }
