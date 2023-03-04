@@ -60,6 +60,5 @@ Then need, added route for main.class in pom.xml
 - Maven 
 - Lombok
 - DB PostgreSQL
-- Swagger UI
 - Rest API
 - Postman
