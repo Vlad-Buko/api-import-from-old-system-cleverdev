@@ -62,3 +62,4 @@ Then need, added route for main.class in pom.xml
 - DB PostgreSQL
 - Rest API
 - Postman
+- Liquibase 
