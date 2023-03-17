@@ -5,7 +5,7 @@ This application import notes from old system in this application via Rest API.
 Presenting here scheduled every 2 hours, for the sake of import, and updating
 application.
 
-Method testing was done using Swagger, Postman, JUnit
+Method testing using Swagger, Postman, JUnit
 
 
 ---
